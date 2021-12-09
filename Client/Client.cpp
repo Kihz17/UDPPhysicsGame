@@ -1,4 +1,7 @@
 #include "Client.h"
+#include "PacketHandler.h"
+
+#include <Packets.h>
 
 void _PrintWSAError(const char* file, int line)
 {
@@ -57,7 +60,10 @@ void Client::CreateSocket(const std::string& ip, int port)
 
 	SetNonBlocking(serverSocket);
 
-	Send(); // TODO: Send start packet
+	// Send some random data on "connection" to avoid 10022 error
+	Buffer buffer(4);
+	buffer.WriteUInt32BE(99999999);
+	Send(buffer);
 
 	char ipv4[INET_ADDRSTRLEN];
 	inet_ntop(toAddress.sin_family, &toAddress.sin_addr, ipv4, sizeof(ipv4));
@@ -72,7 +78,7 @@ void Client::OnUpdate(float deltaTime)
 {
 	if (lastPacketTime >= 10000.0f)
 	{
-		printf("WARNING: We haven't received a packet in 10 seconds, have we lost connection?");
+		printf("WARNING: We haven't received a packet in 10 seconds, have we lost connection?\n");
 	}
 
 	struct sockaddr_in from;
@@ -98,7 +104,14 @@ void Client::OnUpdate(float deltaTime)
 	}
 
 	lastPacketTime = 0.0f;
-	printf("Got data %d", result);
+	int packetType = buffer.ReadUInt32LE();
+	PacketHandler::HandlePacket(packetType, buffer, this);
+}
+
+void Client::Send(Packet& packet)
+{
+	Buffer buffer = packet.Serialize();
+	Send(buffer);
 }
 
 void Client::Send(Buffer& buffer)

@@ -138,6 +138,7 @@ void Server::ReadData()
 	Player* player = GetPlayer(port, from);
 
 	int packetType = buffer.ReadUInt32LE();
+	if (packetType == 99999999) return; // This is a garbage packet that is sent on client inital connection to stop WSA10022 error
 	PacketHandler::HandlePacket(packetType, buffer, this);
 }
 
@@ -170,7 +171,7 @@ GameObject* Server::GetGameObject(int id)
 	std::unordered_map<int, GameObject*>::iterator it = gameObjects.find(id);
 	if (it == gameObjects.end())
 	{
-		printf("GameObject with ID %d not found", id);
+		printf("GameObject with ID %d not found\n", id);
 		return nullptr;
 	}
 
@@ -180,7 +181,7 @@ GameObject* Server::GetGameObject(int id)
 void Server::BroadcastUpdate()
 {
 	// Grab packets that are needed to update game objects' state
-	std::vector<Packet> updatePackets;
+	std::vector<Packet*> updatePackets; // We need to hold a vector of pointers because the class "Packet" is pure virtual
 	{
 		std::unordered_map<int, DirtyGameObject>::iterator it = dirtyGameObjects.begin();
 		while (it != dirtyGameObjects.end())
@@ -197,7 +198,7 @@ void Server::BroadcastUpdate()
 				if (index == 0) // Position
 				{
 					glm::mat4& transform = gameObject->GetTransform();
-					updatePackets.push_back(PacketUpdatePosition(it->first, transform[3].x, transform[3].y, transform[3].z));
+					updatePackets.push_back(new PacketUpdatePosition(it->first, transform[3].x, transform[3].y, transform[3].z));
 				}
 			}
 			it++;
@@ -208,11 +209,16 @@ void Server::BroadcastUpdate()
 	std::unordered_map<unsigned short, Player*>::iterator it = players.begin();
 	while (it != players.end())
 	{
-		for (const Packet& packet : updatePackets)
+		for (const Packet* packet : updatePackets)
 		{
-			SendTo(it->second, packet); // TODO: Don't keep recreating buffer objects to reduce overhead
+			SendTo(it->second, *packet); // TODO: Don't keep recreating buffer objects to reduce overhead
 		}
 		it++;
+	}
+
+	for (Packet* packet : updatePackets)
+	{
+		delete packet;
 	}
 }
 
@@ -274,5 +280,5 @@ void Server::FlagDirty(GameObject* gameObject, int dirtyIndex)
 
 glm::vec3 Server::GetRandomSpawnPoint()
 {
-	return spawnPoints[Utils::GetRandomInt(0, 5)];
+	return spawnPoints[Utils::GetRandomInt(0, 4)];
 }

@@ -30,6 +30,7 @@ public:
 
 	GameObject* GetGameObject(int id);
 	void FlagDirty(GameObject* gameObject, int dirtyIndex);
+	void BroadcastPacket(const Packet& packet);
 
 	double deltaTime;
 private:
@@ -40,7 +41,7 @@ private:
 
 	void SendTo(Player* player, const Packet& packet);
 	void SendTo(Player* player, Buffer& buffer);
-	void BroadcastPacket(const Packet& packet);
+
 	void BroadcastPacketExclude(Player* player, const Packet& packet);
 
 	glm::vec3 GetRandomSpawnPoint();

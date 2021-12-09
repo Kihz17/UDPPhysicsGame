@@ -141,14 +141,18 @@
   <ItemGroup>
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="Packet.h" />
+    <ClInclude Include="PacketPlayerConnectSuccess.h" />
     <ClInclude Include="Packets.h" />
     <ClInclude Include="PacketSpawnGameObject.h" />
     <ClInclude Include="PacketUpdatePosition.h" />
+    <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Buffer.cpp" />
+    <ClCompile Include="PacketPlayerConnectSuccess.cpp" />
     <ClCompile Include="PacketSpawnGameObject.cpp" />
     <ClCompile Include="PacketUpdatePosition.cpp" />
+    <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

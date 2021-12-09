@@ -12,6 +12,7 @@
 #pragma comment(lib, "Ws2_32.lib")
 
 #include <Buffer.h>
+#include <Packet.h>
 
 #include <vector>
 #include <string>
@@ -29,6 +30,7 @@ public:
 
 	void OnUpdate(float deltaTime);
 
+	void Send(Packet& packet);
 	void Send(Buffer& buffer);
 
 private:

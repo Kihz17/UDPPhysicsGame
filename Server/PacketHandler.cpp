@@ -4,7 +4,7 @@
 #include <PacketUpdatePosition.h>
 
 // 0 = PacketUpdatePosition (Client -> Server & Server -> Client)
-// 1 = 
+// 1 = PacketPlayerConnectSuccess (Server -> Client)
 // 2 = PacketSpawnGameObject (Server -> Client)
 // 3 = PacketDestroyGameObject (Server -> Client)
 void PacketHandler::HandlePacket(int packetType, Buffer& buffer, Server* server)

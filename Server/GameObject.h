@@ -47,7 +47,7 @@ public:
 
 	static int GetNextGameObjectId();
 
-private:
+protected:
 	int id;
 	glm::mat4 transform;
 };
