@@ -39,9 +39,6 @@
     <ClCompile Include="PacketHandler.cpp">
       <Filter>Source Files\PacketHandlers</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files\Physics</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Server.h">
@@ -49,9 +46,6 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files\Physics</Filter>
     </ClInclude>
     <ClInclude Include="PlayerNetworkInfo.h">
       <Filter>Header Files</Filter>

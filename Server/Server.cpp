@@ -13,13 +13,15 @@ const float UPDATES_PER_SEC = 20;
 std::clock_t curr;
 std::clock_t prev;
 
+static int gameObjectId = 0;
+
 const glm::vec3 spawnPoints[5] =
 {
-	{0.0f, 0.0f, 0.0f},
-	{0.0f, 0.0f, 0.0f},
-	{0.0f, 0.0f, 0.0f},
-	{0.0f, 0.0f, 0.0f},
-	{0.0f, 0.0f, 0.0f},
+	{0.0f, 3.0f, 0.0f},
+	{0.0f, 3.0f, 0.0f},
+	{0.0f, 3.0f, 0.0f},
+	{0.0f, 3.0f, 0.0f},
+	{0.0f, 3.0f, 0.0f},
 };
 
 void _PrintWSAError(const char* file, int line)
@@ -139,7 +141,7 @@ void Server::ReadData()
 
 	int packetType = buffer.ReadUInt32LE();
 	if (packetType == 99999999) return; // This is a garbage packet that is sent on client inital connection to stop WSA10022 error
-	PacketHandler::HandlePacket(packetType, buffer, this);
+	PacketHandler::HandlePacket(packetType, buffer, this); // TODO: Ensure that a client isn't faking their GameObject ID
 }
 
 Player* Server::GetPlayer(unsigned short port, struct sockaddr_in fromSocket)
@@ -154,14 +156,33 @@ Player* Server::GetPlayer(unsigned short port, struct sockaddr_in fromSocket)
 	glm::vec3 spawnPoint = GetRandomSpawnPoint();
 	glm::mat4 playerTransform(1.0f);
 	playerTransform[3] = glm::vec4(spawnPoint, 1.0f);
-	Player* player = new Player(port, fromSocket, playerTransform);
+	Player* player = new Player(GetNextGameObjectId(), port, fromSocket, playerTransform);
 
 	players.insert({ port, player });
 	gameObjects.insert({ player->GetId(), player});
 
+	// Tell new player we have successfully connected
+	PacketPlayerConnectSuccess connectPacket(player->GetId());
+	SendTo(player, connectPacket);
+
 	// Show players that a new client has joined
-	PacketSpawnGameObject spawnPacket(player->GetId(), spawnPoint.x, spawnPoint.y, spawnPoint.z);
+	PacketSpawnGameObject spawnPacket(player->GetId(), player->GetType(), spawnPoint.x, spawnPoint.y, spawnPoint.z);
 	BroadcastPacket(spawnPacket);
+
+	// Tell new player about all game objects that currently exist
+	{
+		std::unordered_map<int, GameObject*>::iterator it = gameObjects.begin();
+		while (it != gameObjects.end())
+		{
+			GameObject* obj = it->second;
+			it++;
+
+			if (obj->GetId() == player->GetId()) continue;
+			glm::mat4& transform = obj->GetTransform();
+			PacketSpawnGameObject spawnPacket(obj->GetId(), obj->GetType(), transform[3].x, transform[3].y, transform[3].z);
+			SendTo(player, spawnPacket);
+		}
+	}
 
 	return player;
 }
@@ -182,6 +203,26 @@ void Server::BroadcastUpdate()
 {
 	// Grab packets that are needed to update game objects' state
 	std::vector<Packet*> updatePackets; // We need to hold a vector of pointers because the class "Packet" is pure virtual
+
+	// Add move state update packet
+	{
+		std::vector<GameObjectMoveUpdate> updates;
+		std::unordered_map<int, GameObject*>::iterator it = gameObjects.begin();
+		while (it != gameObjects.end())
+		{
+			GameObjectMoveUpdate update;
+			update.gameObjectId = it->second->GetId();
+			update.requestId = it->second->lastMoveRequestId;
+			update.position = glm::vec3(it->second->GetTransform()[3]);
+			update.velocity = it->second->GetVelocity();
+			updates.push_back(update);
+			it++;
+		}
+
+		updatePackets.push_back(new PacketUpdateGameObjectPositions(updates));
+	}
+
+	// See if we have any "dirty" data that needs to be updated
 	{
 		std::unordered_map<int, DirtyGameObject>::iterator it = dirtyGameObjects.begin();
 		while (it != dirtyGameObjects.end())
@@ -195,11 +236,11 @@ void Server::BroadcastUpdate()
 			// Go through dirty indices and make their respective packets
 			for (const int& index : dirtyObject.dirtyIndices)
 			{
-				if (index == 0) // Position
-				{
-					glm::mat4& transform = gameObject->GetTransform();
-					updatePackets.push_back(new PacketUpdatePosition(it->first, transform[3].x, transform[3].y, transform[3].z));
-				}
+				//if (index == 0) // Position
+				//{
+				//	glm::mat4& transform = gameObject->GetTransform();
+				//	updatePackets.push_back(new PacketUpdatePosition(it->first, transform[3].x, transform[3].y, transform[3].z));
+				//}
 			}
 			it++;
 		}
@@ -281,4 +322,9 @@ void Server::FlagDirty(GameObject* gameObject, int dirtyIndex)
 glm::vec3 Server::GetRandomSpawnPoint()
 {
 	return spawnPoints[Utils::GetRandomInt(0, 4)];
+}
+
+int Server::GetNextGameObjectId()
+{
+	return gameObjectId++;
 }

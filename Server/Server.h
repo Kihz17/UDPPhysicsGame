@@ -32,7 +32,9 @@ public:
 	void FlagDirty(GameObject* gameObject, int dirtyIndex);
 	void BroadcastPacket(const Packet& packet);
 
-	double deltaTime;
+	static int GetNextGameObjectId();
+
+	float deltaTime;
 private:
 	void SetNonBlocking(SOCKET socket);
 	void ReadData();

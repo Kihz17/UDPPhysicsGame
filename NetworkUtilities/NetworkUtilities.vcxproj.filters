@@ -19,15 +19,27 @@
     <Filter Include="Source Files\Packets">
       <UniqueIdentifier>{aec0efd6-9365-4873-8972-9e5023801201}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Physics">
+      <UniqueIdentifier>{faf3a696-c61f-4853-be58-7bb201aa2b08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{6fafc75f-ba05-463f-b4d6-9053028eeba2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Physics\ContactGenerators">
+      <UniqueIdentifier>{b849a6b6-289e-42cb-bc46-24e0726bb656}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics\ContactGenerators">
+      <UniqueIdentifier>{6af961f7-148d-4fe0-b297-9e8a2ae02714}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics\CollisionHandlers">
+      <UniqueIdentifier>{53fbda04-2c17-4704-9058-507a699e7884}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Packet.h">
-      <Filter>Header Files\Packets</Filter>
-    </ClInclude>
-    <ClInclude Include="PacketUpdatePosition.h">
       <Filter>Header Files\Packets</Filter>
     </ClInclude>
     <ClInclude Include="PacketSpawnGameObject.h">
@@ -42,13 +54,55 @@
     <ClInclude Include="PacketPlayerConnectSuccess.h">
       <Filter>Header Files\Packets</Filter>
     </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketRemoveGameObject.h">
+      <Filter>Header Files\Packets</Filter>
+    </ClInclude>
+    <ClInclude Include="AABB.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInfo.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketPlayerInput.h">
+      <Filter>Header Files\Packets</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketUpdateGameObjectPositions.h">
+      <Filter>Header Files\Packets</Filter>
+    </ClInclude>
+    <ClInclude Include="ContactInstance.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="ContactResolver.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="IContactGenerator.h">
+      <Filter>Header Files\Physics\ContactGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectToGameObjectContactGenerator.h">
+      <Filter>Header Files\Physics\ContactGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionHandler.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionObjects.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectToAABBContactGenerator.h">
+      <Filter>Header Files\Physics\ContactGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectToSphereContactGenerator.h">
+      <Filter>Header Files\Physics\ContactGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectToMeshContactGenerator.h">
+      <Filter>Header Files\Physics\ContactGenerators</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Buffer.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PacketUpdatePosition.cpp">
-      <Filter>Source Files\Packets</Filter>
     </ClCompile>
     <ClCompile Include="PacketSpawnGameObject.cpp">
       <Filter>Source Files\Packets</Filter>
@@ -58,6 +112,45 @@
     </ClCompile>
     <ClCompile Include="PacketPlayerConnectSuccess.cpp">
       <Filter>Source Files\Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketRemoveGameObject.cpp">
+      <Filter>Source Files\Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="AABB.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerInfo.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketPlayerInput.cpp">
+      <Filter>Source Files\Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketUpdateGameObjectPositions.cpp">
+      <Filter>Source Files\Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="ContactInstance.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="ContactResolver.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectToGameObjectContactGenerator.cpp">
+      <Filter>Source Files\Physics\ContactGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionHandler.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectToAABBContactGenerator.cpp">
+      <Filter>Source Files\Physics\ContactGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectToSphereContactGenerator.cpp">
+      <Filter>Source Files\Physics\ContactGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectToMeshContactGenerator.cpp">
+      <Filter>Source Files\Physics\ContactGenerators</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

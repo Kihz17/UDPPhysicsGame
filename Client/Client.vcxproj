@@ -118,13 +118,13 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SOLUTION_DIR=R"($(SolutionDir))";_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;yaml-cpp.lib;assimp-vc142-mtd.lib;opengl32.lib;glu32.lib;soil2.lib;NetworkUtilities.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;yaml-cpp.lib;assimp-vc142-mt.lib;opengl32.lib;glu32.lib;soil2.lib;NetworkUtilities.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -133,26 +133,87 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SOLUTION_DIR=R"($(SolutionDir))";NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;yaml-cpp.lib;assimp-vc142-mtd.lib;opengl32.lib;glu32.lib;soil2.lib;NetworkUtilities.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;yaml-cpp.lib;assimp-vc142-mt.lib;opengl32.lib;glu32.lib;soil2.lib;NetworkUtilities.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AlphaTexture.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="ClientGameObject.h" />
+    <ClInclude Include="ClientPlayer.h" />
+    <ClInclude Include="CollisionContainer.h" />
+    <ClInclude Include="DiffuseTexture.h" />
+    <ClInclude Include="DiscardTexture.h" />
+    <ClInclude Include="EnvironmentMap.h" />
     <ClInclude Include="GLCommon.h" />
+    <ClInclude Include="HeightMapTexture.h" />
+    <ClInclude Include="IndexBuffer.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="KeyCodes.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshManager.h" />
+    <ClInclude Include="MouseCodes.h" />
     <ClInclude Include="PacketHandler.h" />
+    <ClInclude Include="PlayerController.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="SaveableCollider.h" />
+    <ClInclude Include="SaveableMesh.h" />
+    <ClInclude Include="SaveableTexture.h" />
+    <ClInclude Include="Serializable.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="StaticScene.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="UUID.h" />
+    <ClInclude Include="VertexArrayObject.h" />
+    <ClInclude Include="VertexBuffer.h" />
+    <ClInclude Include="VertexInformation.h" />
+    <ClInclude Include="World.h" />
+    <ClInclude Include="YAMLOverloads.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AlphaTexture.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="ClientGameObject.cpp" />
+    <ClCompile Include="ClientPlayer.cpp" />
+    <ClCompile Include="CollisionContainer.cpp" />
+    <ClCompile Include="DiffuseTexture.cpp" />
+    <ClCompile Include="DiscardTexture.cpp" />
+    <ClCompile Include="EnvironmentMap.cpp" />
+    <ClCompile Include="glad.c" />
+    <ClCompile Include="HeightMapTexture.cpp" />
+    <ClCompile Include="IndexBuffer.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MeshManager.cpp" />
     <ClCompile Include="PacketHandler.cpp" />
+    <ClCompile Include="PlayerController.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="SaveableCollider.cpp" />
+    <ClCompile Include="SaveableMesh.cpp" />
+    <ClCompile Include="SaveableTexture.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="StaticScene.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="UUID.cpp" />
+    <ClCompile Include="VertexArrayObject.cpp" />
+    <ClCompile Include="VertexBuffer.cpp" />
+    <ClCompile Include="World.cpp" />
+    <ClCompile Include="YAMLOverloads.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

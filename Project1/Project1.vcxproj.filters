@@ -251,9 +251,6 @@
     <ClInclude Include="Serializable.h">
       <Filter>Header Files\Graphics\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="SceneMeshData.h">
       <Filter>Header Files\Graphics\Scene</Filter>
     </ClInclude>

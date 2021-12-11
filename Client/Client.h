@@ -4,6 +4,12 @@
 #define WIN32_LEAN_AND_MEAN
 #endif
 
+#define NOMINMAX
+
+#include "pch.h"
+#include "World.h"
+#include "PlayerController.h"
+
 #include <windows.h>
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -23,7 +29,7 @@ void _PrintWSAError(const char* file, int line);
 class Client
 {
 public:
-	Client();
+	Client(World* world);
 	~Client();
 
 	void CreateSocket(const std::string& ip, int port);
@@ -33,7 +39,15 @@ public:
 	void Send(Packet& packet);
 	void Send(Buffer& buffer);
 
+	inline const Ref<Camera> GetCamera() const { return camera; }
+	inline PlayerController* GetPlayerController() { return playerController; }
+
+	const float windowWidth = 1700;
+	const float windowHeight = 800;
+
 private:
+	friend class PacketHandler;
+
 	void SetNonBlocking(SOCKET socket);
 
 	SOCKET serverSocket;
@@ -42,4 +56,11 @@ private:
 	FD_SET readSet;
 
 	float lastPacketTime;
+
+	int ourId; // Holds our game object id
+
+	World* world;
+
+	PlayerController* playerController;
+	Ref<Camera> camera;
 };

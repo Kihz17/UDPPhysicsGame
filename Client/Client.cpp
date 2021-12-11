@@ -1,7 +1,10 @@
 #include "Client.h"
 #include "PacketHandler.h"
+#include "Input.h"
 
 #include <Packets.h>
+
+float lastInputUpdate = 0.0f;
 
 void _PrintWSAError(const char* file, int line)
 {
@@ -15,8 +18,12 @@ void _PrintWSAError(const char* file, int line)
 	LocalFree(s);
 }
 
-Client::Client()
-	: serverSocket(INVALID_SOCKET)
+Client::Client(World* world)
+	: world(world),
+	serverSocket(INVALID_SOCKET),
+	ourId(-1),
+	camera(CreateRef<Camera>(windowWidth, windowHeight)),
+	playerController(nullptr)
 {
 	WSAData WSAData;
 	int	iResult;
@@ -31,6 +38,7 @@ Client::Client()
 
 Client::~Client(void)
 {
+	delete playerController;
 	closesocket(serverSocket);
 	WSACleanup();
 }
@@ -80,6 +88,35 @@ void Client::OnUpdate(float deltaTime)
 	{
 		printf("WARNING: We haven't received a packet in 10 seconds, have we lost connection?\n");
 	}
+
+	if (Input::IsKeyPressed(Key::Escape))
+	{
+		playerController->ToggleHandleInput(false);
+	}
+	else if (Input::IsKeyPressed(Key::Tab))
+	{
+		playerController->ToggleHandleInput(true);
+	}
+
+	lastInputUpdate += deltaTime;
+	if (playerController)
+	{
+		playerController->OnUpdate(deltaTime);
+		if (lastInputUpdate >= 0.016f) // Only send inputs 60 times a second
+		{
+			lastInputUpdate = 0.0f;
+
+			int moveStateId = playerController->NextMoveRequestId();
+			glm::vec3 position = glm::vec3(playerController->GetTransform()[3]);
+
+			ClientMoveState moveState;
+			moveState.postion = position;
+			playerController->InsertMoveState(moveStateId, moveState);
+
+			PacketPlayerInput packet(ourId, moveStateId, position);
+			Send(packet);
+		}
+	}	
 
 	struct sockaddr_in from;
 	int fromlen = sizeof(from);

@@ -195,7 +195,6 @@
     <ClInclude Include="SceneTextureData.h" />
     <ClInclude Include="Serializable.h" />
     <ClInclude Include="MeshManager.h" />
-    <ClInclude Include="Renderer.h" />
     <ClInclude Include="SceneMeshData.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="UUID.h" />
