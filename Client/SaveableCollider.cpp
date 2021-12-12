@@ -99,7 +99,7 @@ SaveableCollider SaveableCollider::StaticLoad(Ref<Mesh> mesh, const YAML::Node& 
 			indices.push_back(faceToAdd);
 		}
 
-		MeshCollider* meshCollider = new MeshCollider();
+ 		MeshCollider* meshCollider = new MeshCollider();
 		meshCollider->vertices = vertices;
 		meshCollider->indices = indices;
 		SaveableCollider collider(colliderType, meshCollider, bounciness);

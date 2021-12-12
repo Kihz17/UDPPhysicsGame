@@ -24,7 +24,7 @@ void SaveableMesh::Save(YAML::Emitter& emitter) const
 	emitter << YAML::BeginMap;
 
 	emitter << YAML::Key << "UUID" << YAML::Value << this->uuid;
-	emitter << YAML::Key << "Path" << YAML::Value << SerializeUtils::SavePath(this->mesh->GetPath());
+	emitter << YAML::Key << "Path" << YAML::Value << this->mesh->GetPath();
 	emitter << YAML::Key << "Position" << YAML::Value << this->position;
 	emitter << YAML::Key << "Orientation" << YAML::Value << this->orientation;
 	emitter << YAML::Key << "Scale" << YAML::Value << this->scale;
@@ -75,7 +75,7 @@ Ref<SaveableMesh> SaveableMesh::StaticLoad(const YAML::Node& node)
 	const YAML::Node& colliderNode = node["Collider"];
 	if (colliderNode)
 	{
-		SaveableCollider::StaticLoad(mesh, colliderNode);
+		meshData->collider = SaveableCollider::StaticLoad(mesh, colliderNode);
 	}
 
 	return meshData;

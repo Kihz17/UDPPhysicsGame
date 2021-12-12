@@ -25,7 +25,7 @@ size_t GameObjectToGameObjectContactGenerator::AddContact(std::vector<GameObject
 				continue;
 			}
 
-			CollisionHandler::HandleCollision(contactInstance, gameObject1, gameObject2, &contactsGenerated);
+			CollisionHandler::HandleCollision(contactInstance, gameObject1, gameObject2, contactsGenerated);
 		}
 	}
 

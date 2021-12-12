@@ -70,6 +70,7 @@ int main(int argc, char** argv)
 
 	StaticScene scene(shader);
 	scene.Load("scene.yaml", collisionContainer);
+	//scene.Save("colliderScene.yaml");
 
 	client.CreateSocket("173.34.12.232", 5149);
 
@@ -114,8 +115,11 @@ int main(int argc, char** argv)
 		// Handle collisions
 		{
 			std::vector<GameObject*> gameObjects;
-			gameObjects.push_back(client.GetPlayerController());
-
+			if (client.GetPlayerController())
+			{
+				gameObjects.push_back(client.GetPlayerController());
+			}
+		
 			std::unordered_map<int, ClientGameObject*>::iterator it = world->begin();
 			while (it != world->end())
 			{
@@ -124,6 +128,11 @@ int main(int argc, char** argv)
 			}
 
 			collisionContainer->OnUpdate(deltaTime, gameObjects);
+		}
+
+		if (client.GetPlayerController())
+		{
+			client.GetCamera()->position = glm::vec3(client.GetPlayerController()->GetTransform()[3]); // Update camera with controller after collisions take place
 		}
 
 		scene.OnUpdate(client.GetCamera()->position, deltaTime);

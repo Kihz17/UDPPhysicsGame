@@ -115,6 +115,32 @@ void StaticScene::Load(const std::string& path, CollisionContainer* collisionCon
 			const YAML::Node& node = (*it);
 			Ref<SaveableMesh> meshData = SaveableMesh::StaticLoad(node);
 
+			/*meshData->collider.colliderType = CollisionHandlerType::Mesh;
+
+			std::vector<MeshCollider::Vertex> vertices;
+			for (const Vertex& vertex : meshData->mesh->GetVertices())
+			{
+				MeshCollider::Vertex vertexToAdd;
+				vertexToAdd.position = vertex.position;
+				vertexToAdd.normal = vertex.normal;
+				vertices.push_back(vertexToAdd);
+			}
+
+			std::vector<MeshCollider::Face> indices;
+			for (const Face& face : meshData->mesh->GetFaces())
+			{
+				MeshCollider::Face faceToAdd;
+				faceToAdd.v1 = face.v1;
+				faceToAdd.v2 = face.v2;
+				faceToAdd.v3 = face.v3;
+				indices.push_back(faceToAdd);
+			}
+
+			MeshCollider* meshCollider = new MeshCollider();
+			meshCollider->vertices = vertices;
+			meshCollider->indices = indices;
+			meshData->collider.collider = meshCollider;*/
+
 			// Load collision data if the mesh has any 
 			CollisionHandlerType collisionType = meshData->collider.colliderType;
 			if (collisionType == CollisionHandlerType::Sphere)

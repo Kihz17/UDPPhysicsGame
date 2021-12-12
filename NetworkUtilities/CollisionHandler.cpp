@@ -1,6 +1,6 @@
 #include "CollisionHandler.h"
 
-bool CollisionHandler::HandleCollision(ContactInstance* contactInstance, GameObject* gameObject1, GameObject* gameObject2, size_t* contactsGenerated)
+bool CollisionHandler::HandleCollision(ContactInstance* contactInstance, GameObject* gameObject1, GameObject* gameObject2, size_t& contactsGenerated)
 {
 	CollisionHandlerType collisionType1 = gameObject1->GetCollisionHandlerType();
 	CollisionHandlerType collisionType2 = gameObject2->GetCollisionHandlerType();
@@ -69,7 +69,7 @@ bool CollisionHandler::HandleCollision(ContactInstance* contactInstance, GameObj
 	}
 }
 
-bool CollisionHandler::HandleSphereToSphere(ContactInstance * contactInstance, size_t* contactsGenerated,
+bool CollisionHandler::HandleSphereToSphere(ContactInstance * contactInstance, size_t& contactsGenerated,
 	SphereCollider* sphereCollider1, const glm::vec3& position1,
 	SphereCollider* sphereCollider2, const glm::vec3& position2,
 	float restitution,
@@ -92,7 +92,7 @@ bool CollisionHandler::HandleSphereToSphere(ContactInstance * contactInstance, s
 	return false;
 }
 
-bool CollisionHandler::HandleSphereToAABB(ContactInstance* contactInstance, size_t* contactsGenerated,
+bool CollisionHandler::HandleSphereToAABB(ContactInstance* contactInstance, size_t& contactsGenerated,
 	SphereCollider* sphereCollider, const glm::vec3& spherePosition,
 	AABBCollider* aabbCollider, const glm::mat4& aabbTransform,
 	float restitution,
@@ -100,8 +100,8 @@ bool CollisionHandler::HandleSphereToAABB(ContactInstance* contactInstance, size
 {
 	float radius = sphereCollider->radius;
 
-	glm::vec4 transformedMin = glm::vec4(aabbCollider->min, 1.0f) * aabbTransform;
-	glm::vec4 transformedMax = glm::vec4(aabbCollider->max, 1.0f) * aabbTransform;
+	glm::vec4 transformedMin = aabbTransform * glm::vec4(aabbCollider->min, 1.0f);
+	glm::vec4 transformedMax = aabbTransform * glm::vec4(aabbCollider->max, 1.0f);
 
 	// Find the closest AABB point to our particle
 	float closestX = std::max(transformedMin.x, std::min(spherePosition.x, transformedMax.x));
@@ -150,7 +150,7 @@ bool CollisionHandler::HandleSphereToAABB(ContactInstance* contactInstance, size
 	return false;
 }
 
-bool CollisionHandler::HandleSphereToMesh(ContactInstance* contactInstance, size_t* contactsGenerated,
+bool CollisionHandler::HandleSphereToMesh(ContactInstance* contactInstance, size_t& contactsGenerated,
 	SphereCollider* sphereCollider, const glm::vec3& spherePosition,
 	MeshCollider* meshCollider, const glm::mat4& meshTransform,
 	float restitution,
@@ -166,14 +166,14 @@ bool CollisionHandler::HandleSphereToMesh(ContactInstance* contactInstance, size
 		const MeshCollider::Vertex& v2 = vertices[face.v2];
 		const MeshCollider::Vertex& v3 = vertices[face.v3];
 
-		glm::vec4 vertexPos1 = glm::vec4(v1.position, 1.0f) * meshTransform;
-		glm::vec4 vertexPos2 = glm::vec4(v2.position, 1.0f) * meshTransform;
-		glm::vec4 vertexPos3 = glm::vec4(v3.position, 1.0f) * meshTransform;
+		glm::vec4 vertexPos1 = meshTransform * glm::vec4(v1.position, 1.0f);
+		glm::vec4 vertexPos2 = meshTransform * glm::vec4(v2.position, 1.0f);
+		glm::vec4 vertexPos3 = meshTransform * glm::vec4(v3.position, 1.0f);
 
 		glm::mat3 rotation(meshTransform);
-		glm::vec3 normal1 = glm::normalize(v1.normal * rotation);
-		glm::vec3 normal2 = glm::normalize(v1.normal * rotation);
-		glm::vec3 normal3 = glm::normalize(v1.normal * rotation);
+		glm::vec3 normal1 = glm::normalize(rotation * v1.normal);
+		glm::vec3 normal2 = glm::normalize(rotation * v2.normal);
+		glm::vec3 normal3 = glm::normalize(rotation * v3.normal);
 		glm::vec3 normal = (normal1 + normal2 + normal3) / 3.0f; // Average 3 normals to get face normal
 
 		float radius = sphereCollider->radius;

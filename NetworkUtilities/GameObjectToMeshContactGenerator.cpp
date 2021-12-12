@@ -21,7 +21,7 @@ size_t GameObjectToMeshContactGenerator::AddContact(std::vector<GameObject*>& ga
 
 		if (collisionType == CollisionHandlerType::Sphere)
 		{
-			CollisionHandler::HandleSphereToMesh(contactInstance, &contactsGenerated,
+			CollisionHandler::HandleSphereToMesh(contactInstance, contactsGenerated,
 				(SphereCollider*)gameObject->GetColliderObject(), glm::vec3(transform[3]),
 				this->collider, this->transform,
 				restitution,

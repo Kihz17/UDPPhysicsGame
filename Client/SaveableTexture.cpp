@@ -13,7 +13,7 @@ void SaveableTexture::Save(YAML::Emitter& emitter) const
 	TextureType textureType = this->texture->GetType();
 	emitter << YAML::BeginMap;
 	emitter << YAML::Key << "TextureType" << YAML::Value << TextureTypeToString(textureType);
-	emitter << YAML::Key << "Path" << YAML::Value << SerializeUtils::SavePath(this->texture->GetPath());
+	emitter << YAML::Key << "Path" << YAML::Value << this->texture->GetPath();
 	emitter << YAML::Key << "Ratio" << YAML::Value << this->ratio;
 	emitter << YAML::Key << "TexCoordScale" << YAML::Value << this->texCoordScale;
 	emitter << YAML::Key << "FilterType" << YAML::Value << FilterTypeToString(this->texture->GetFilterType());

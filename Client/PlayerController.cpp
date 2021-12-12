@@ -28,40 +28,38 @@ void PlayerController::OnUpdate(float deltaTime)
 		movementDirection.y = 0.0f;
 		movementDirection = glm::normalize(movementDirection);
 
+		glm::vec3 force(0.0f, 0.0f, 0.0f);
+
 		glm::vec3 newPosition = glm::vec3(transform[3]);
 		if (Input::IsKeyPressed(Key::W))
 		{
-			movementDirection *= PlayerInfo::PlayerMoveSpeed * deltaTime;
+			force += movementDirection * PlayerInfo::PlayerMoveSpeed;
 		}
 		else if (Input::IsKeyPressed(Key::S))
 		{
-			movementDirection *= -PlayerInfo::PlayerMoveSpeed * deltaTime;
+			force += movementDirection * -PlayerInfo::PlayerMoveSpeed;
 		}
 
 		if (Input::IsKeyPressed(Key::A))
 		{
 			constexpr float theta = glm::radians(90.0f);
 			glm::vec3 left(movementDirection.x * cos(theta) + movementDirection.z * sin(theta), 0.0f, -movementDirection.x * sin(theta) + movementDirection.z * cos(theta));
-			movementDirection = left * PlayerInfo::PlayerMoveSpeed * deltaTime;
+			force += left * PlayerInfo::PlayerMoveSpeed;
 		}
 		else if (Input::IsKeyPressed(Key::D))
 		{
 			constexpr float theta = glm::radians(-90.0f);
 			glm::vec3 right(movementDirection.x * cos(theta) + movementDirection.z * sin(theta), 0.0f, -movementDirection.x * sin(theta) + movementDirection.z * cos(theta));
-			movementDirection = right * PlayerInfo::PlayerMoveSpeed * deltaTime;
+			force += right * PlayerInfo::PlayerMoveSpeed;
 		}
 
-		ApplyForce(movementDirection); // Apply force from player controls
+		std::cout << "X: " << force.x << "Y: " << force.y << "Z: " << force.z << std::endl;
+		ApplyForce(force); // Apply force from player controls
 	}
 
 	ApplyForce(PlayerInfo::Gravity * GetMass()); // Apply gravity
 
 	Update(deltaTime); // Move
-
-	// Update camera
-	camera->position.x = transform[3].x;
-	camera->position.y = transform[3].y + cameraYOffset;
-	camera->position.z = transform[3].z;
 }
 
 void PlayerController::ToggleHandleInput(bool state)

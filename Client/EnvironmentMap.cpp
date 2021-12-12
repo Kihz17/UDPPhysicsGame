@@ -212,15 +212,15 @@ void EnvironmentMap::LoadUniforms(Ref<Shader> shader)
 void EnvironmentMap::Save(YAML::Emitter& emitter) const
 {
 	emitter << YAML::BeginMap;
-	emitter << YAML::Key << "PosXPath" << YAML::Value << SerializeUtils::SavePath(this->posXFile);
-	emitter << YAML::Key << "NegXPath" << YAML::Value << SerializeUtils::SavePath(this->negXFile);
-	emitter << YAML::Key << "PosYPath" << YAML::Value << SerializeUtils::SavePath(this->posYFile);
-	emitter << YAML::Key << "NegYPath" << YAML::Value << SerializeUtils::SavePath(this->negYFile);
-	emitter << YAML::Key << "PosZPath" << YAML::Value << SerializeUtils::SavePath(this->posZFile);
-	emitter << YAML::Key << "NegZPath" << YAML::Value << SerializeUtils::SavePath(this->negZFile);
+	emitter << YAML::Key << "PosXPath" << YAML::Value << this->posXFile;
+	emitter << YAML::Key << "NegXPath" << YAML::Value << this->negXFile;
+	emitter << YAML::Key << "PosYPath" << YAML::Value << this->posYFile;
+	emitter << YAML::Key << "NegYPath" << YAML::Value << this->negYFile;
+	emitter << YAML::Key << "PosZPath" << YAML::Value << this->posZFile;
+	emitter << YAML::Key << "NegZPath" << YAML::Value << this->negZFile;
 	emitter << YAML::Key << "MipMaps" << YAML::Value << this->mipMaps;
 	emitter << YAML::Key << "Seamless" << YAML::Value << this->seamless;
-	emitter << YAML::Key << "MeshPath" << YAML::Value << SerializeUtils::SavePath(this->mesh->GetPath());
+	emitter << YAML::Key << "MeshPath" << YAML::Value << this->mesh->GetPath();
 	emitter << YAML::EndMap;
 }
 
