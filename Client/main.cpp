@@ -70,9 +70,8 @@ int main(int argc, char** argv)
 
 	StaticScene scene(shader);
 	scene.Load("scene.yaml", collisionContainer);
-	//scene.Save("colliderScene.yaml");
 
-	client.CreateSocket("173.34.12.232", 5149);
+	client.CreateSocket("127.0.0.1", 5149);
 
 	const glm::vec3 cameraOffset(0.0f, 2.0f, 0.0f);
 
@@ -129,9 +128,12 @@ int main(int argc, char** argv)
 			deltaTime = 0.03f;
 		}
 
-		client.OnUpdate(deltaTime); 
-		world->OnUpdate(deltaTime);
-
+		client.OnUpdate(deltaTime);
+		if (client.IsConnected())
+		{	
+			world->OnUpdate(deltaTime);
+		}
+	
 		// Handle collisions
 		{
 			std::vector<GameObject*> gameObjects;

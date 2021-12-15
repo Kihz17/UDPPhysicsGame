@@ -43,6 +43,8 @@ public:
 	inline const Ref<Camera> GetCamera() const { return camera; }
 	inline PlayerController* GetPlayerController() { return playerController; }
 
+	inline bool IsConnected() const { return connected; }
+
 	const float windowWidth = 1700;
 	const float windowHeight = 800;
 
@@ -66,4 +68,6 @@ private:
 	Ref<Camera> camera;
 
 	float updatesPerSecond;
+	bool connected;
+	float lastConnectionTime;
 };

@@ -21,6 +21,7 @@ void PacketHandler::HandlePacket(int packetType, Buffer& buffer, Client* client)
 		}
 
 		client->ourId = packet.playerId;
+		client->connected = true;
 		printf("Our GameObject ID was successfully retreived from the Server!\n");
 		return;
 	}

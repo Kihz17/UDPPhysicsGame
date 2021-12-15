@@ -27,7 +27,9 @@ Client::Client(World* world)
 	ourId(-1),
 	camera(CreateRef<Camera>(windowWidth, windowHeight)),
 	playerController(nullptr),
-	updatesPerSecond(20.0f)
+	updatesPerSecond(20.0f),
+	connected(false),
+	lastConnectionTime(0.0f)
 {
 	WSAData WSAData;
 	int	iResult;
@@ -89,9 +91,24 @@ void Client::CreateSocket(const std::string& ip, int port)
 
 void Client::OnUpdate(float deltaTime)
 {
-	if (lastPacketTime >= 10000.0f)
+	if (connected && lastPacketTime >= 10000.0f)
 	{
 		printf("WARNING: We haven't received a packet in 10 seconds, have we lost connection?\n");
+		connected = false;
+	}
+	
+	
+	if (!connected)
+	{
+		lastConnectionTime += deltaTime;
+		if (lastConnectionTime >= 10.0f)
+		{
+			lastConnectionTime = 0.0f;
+			printf("Not connected, retrying...\n");
+			Buffer buffer(4);
+			buffer.WriteUInt32BE(99999999);
+			Send(buffer);
+		}
 	}
 
 	if (playerController)
@@ -150,7 +167,6 @@ void Client::OnUpdate(float deltaTime)
 		return;
 	}
 
-	printf("Got Packet\n");
 	lastPacketTime = 0.0f;
 	int packetType = buffer.ReadUInt32LE();
 	PacketHandler::HandlePacket(packetType, buffer, this);
