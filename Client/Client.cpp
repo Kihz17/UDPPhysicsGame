@@ -91,7 +91,7 @@ void Client::CreateSocket(const std::string& ip, int port)
 
 void Client::OnUpdate(float deltaTime)
 {
-	if (connected && lastPacketTime >= 10000.0f)
+	if (connected && lastPacketTime >= 10.0f)
 	{
 		printf("WARNING: We haven't received a packet in 10 seconds, have we lost connection?\n");
 		connected = false;

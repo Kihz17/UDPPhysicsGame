@@ -69,6 +69,7 @@ void PacketHandler::HandlePacket(int packetType, Buffer& buffer, Client* client)
 	}
 	else if (packetType == 5)
 	{
+		client->connected = false;
 		printf("Server has shutdown.\n");
 		return;
 	}

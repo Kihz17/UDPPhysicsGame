@@ -51,6 +51,8 @@ private:
 
 	glm::vec3 GetRandomSpawnPoint();
 
+	void UpdateGameState();
+
 	bool isRunning;
 
 	timeval timeVal;

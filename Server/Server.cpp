@@ -113,6 +113,7 @@ void Server::OnUpdate()
 	if (deltaTime < (1.0f / updatesPerSecond)) return;
 	prev = curr;
 
+	UpdateGameState();
 	BroadcastUpdate();
 	dirtyGameObjects.clear();
 }
@@ -128,6 +129,15 @@ void Server::ReadData()
 	if (result == SOCKET_ERROR) {
 		if (WSAGetLastError() == WSAEWOULDBLOCK) return;
 		PrintWSAError();
+
+		std::unordered_map<unsigned short, Player*>::iterator it = players.find(from.sin_port);
+		if (it != players.end())
+		{
+			Player* p = it->second;
+			players.erase(it);
+			gameObjects.erase(p->GetId());
+			delete p;
+		}
 
 		// For a TCP connection you would close this socket, and remove it from 
 		// your list of connections. For UDP we will clear our buffer, and just
@@ -333,4 +343,9 @@ void Server::OnShutdown()
 	printf("Server shutting down...\n");
 	PacketServerShutdown packet;
 	BroadcastPacket(packet);
+}
+
+void Server::UpdateGameState()
+{
+
 }
