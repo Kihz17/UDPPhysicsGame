@@ -23,6 +23,7 @@ public:
 	inline glm::vec3& GetLastNormalizedVelocity() { return lastNormalizedVelocity; }
 	inline int NextMoveRequestId() { return requestId++; }
 
+	inline virtual void ResetJump() override { jumpCount = 0; }
 	inline virtual GameObjectType GetType() const override { return GameObjectType::Player; }
 	inline virtual CollisionHandlerType GetCollisionHandlerType() const override { return CollisionHandlerType::Sphere; }
 
@@ -33,6 +34,9 @@ private:
 	bool handleInput;
 	glm::vec3 lastNormalizedVelocity;
 	int requestId;
+
+	float lastSpacePress;
+	int jumpCount;
 
 	std::map<int, ClientMoveState> moveStates;
 };

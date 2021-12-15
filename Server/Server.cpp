@@ -9,7 +9,6 @@
 
 #include <ctime>
 
-const float UPDATES_PER_SEC = 20;
 std::clock_t curr;
 std::clock_t prev;
 
@@ -39,7 +38,8 @@ void _PrintWSAError(const char* file, int line)
 Server::Server()
 	: isRunning(false),
 	listenSocket(INVALID_SOCKET),
-	acceptSocket(INVALID_SOCKET)
+	acceptSocket(INVALID_SOCKET),
+	updatesPerSecond(20.0f)
 {
 	WSAData WSAData;
 	int	iResult;
@@ -110,7 +110,7 @@ void Server::OnUpdate()
 	curr = std::clock();
 	deltaTime = (curr - prev) / double(CLOCKS_PER_SEC);
 
-	if (deltaTime < (1.0f / UPDATES_PER_SEC)) return;
+	if (deltaTime < (1.0f / updatesPerSecond)) return;
 	prev = curr;
 
 	BroadcastUpdate();
@@ -327,4 +327,11 @@ glm::vec3 Server::GetRandomSpawnPoint()
 int Server::GetNextGameObjectId()
 {
 	return gameObjectId++;
+}
+
+void Server::OnShutdown()
+{
+	printf("Server shutting down...\n");
+	PacketServerShutdown packet;
+	BroadcastPacket(packet);
 }

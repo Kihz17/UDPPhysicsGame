@@ -89,13 +89,16 @@ void Client::OnUpdate(float deltaTime)
 		printf("WARNING: We haven't received a packet in 10 seconds, have we lost connection?\n");
 	}
 
-	if (Input::IsKeyPressed(Key::Escape))
+	if (playerController)
 	{
-		playerController->ToggleHandleInput(false);
-	}
-	else if (Input::IsKeyPressed(Key::Tab))
-	{
-		playerController->ToggleHandleInput(true);
+		if (Input::IsKeyPressed(Key::Escape))
+		{
+			playerController->ToggleHandleInput(false);
+		}
+		else if (Input::IsKeyPressed(Key::Tab))
+		{
+			playerController->ToggleHandleInput(true);
+		}
 	}
 
 	lastInputUpdate += deltaTime;

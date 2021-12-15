@@ -12,4 +12,5 @@ public:
 	static const float PlayerMass;
 	static const float PlayerDefaultBounciness;
 	static const float PlayerColliderRadius;
+	static const float PlayerJumpForce;
 };

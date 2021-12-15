@@ -18,6 +18,11 @@ enum class GameObjectType
 	Sphere,
 };
 
+enum class ConstraintEntityType
+{
+	FerrisWheel
+};
+
 struct DirtyGameObject
 {
 	int id; // ID of the GameObject
@@ -35,7 +40,7 @@ public:
 		velocity(0.0f),
 		bounciness(bounciness),
 		acceleration(0.0f),
-		damping(1.0f), 
+		damping(0.9f), 
 		appliedForce(0.0f)
 	{
 		SetMass(mass);
@@ -65,6 +70,8 @@ public:
 	virtual void Update(float deltaTime);
 
 	virtual GameObjectType GetType() const = 0;
+
+	virtual void ResetJump() {}
 
 	virtual void* GetColliderObject() = 0;
 	virtual CollisionHandlerType GetCollisionHandlerType() const = 0;

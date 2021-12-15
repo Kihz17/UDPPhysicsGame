@@ -9,6 +9,7 @@
 // 2 = PacketSpawnGameObject (Server -> Client)
 // 3 = PacketDestroyGameObject (Server -> Client)
 // 4 = PacketUpdateGameObjectPositions (Server -> Client)
+// 5 = PacketServerShutdown (Server -> Client)
 void PacketHandler::HandlePacket(int packetType, Buffer& buffer, Client* client)
 {
 	if (packetType == 1)
@@ -63,6 +64,11 @@ void PacketHandler::HandlePacket(int packetType, Buffer& buffer, Client* client)
 				gameObject->timeSinceLastUpdate = 0.00001f; // We jsut received a game state update, update
 			}
 		}
+		return;
+	}
+	else if (packetType == 5)
+	{
+		printf("Server has shutdown.\n");
 		return;
 	}
 

@@ -158,6 +158,7 @@
     <ClInclude Include="PacketPlayerInput.h" />
     <ClInclude Include="PacketRemoveGameObject.h" />
     <ClInclude Include="Packets.h" />
+    <ClInclude Include="PacketServerShutdown.h" />
     <ClInclude Include="PacketSpawnGameObject.h" />
     <ClInclude Include="PacketUpdateGameObjectPositions.h" />
     <ClInclude Include="PlayerInfo.h" />
@@ -177,6 +178,7 @@
     <ClCompile Include="PacketPlayerConnectSuccess.cpp" />
     <ClCompile Include="PacketPlayerInput.cpp" />
     <ClCompile Include="PacketRemoveGameObject.cpp" />
+    <ClCompile Include="PacketServerShutdown.cpp" />
     <ClCompile Include="PacketSpawnGameObject.cpp" />
     <ClCompile Include="PacketUpdateGameObjectPositions.cpp" />
     <ClCompile Include="PlayerInfo.cpp" />

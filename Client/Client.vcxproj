@@ -151,6 +151,7 @@
     <ClInclude Include="Client.h" />
     <ClInclude Include="ClientGameObject.h" />
     <ClInclude Include="ClientPlayer.h" />
+    <ClInclude Include="ClientSphere.h" />
     <ClInclude Include="CollisionContainer.h" />
     <ClInclude Include="DiffuseTexture.h" />
     <ClInclude Include="DiscardTexture.h" />

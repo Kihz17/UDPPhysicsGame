@@ -27,10 +27,13 @@ public:
 	~Server();
 
 	void OnUpdate();
+	void OnShutdown();
 
 	GameObject* GetGameObject(int id);
 	void FlagDirty(GameObject* gameObject, int dirtyIndex);
 	void BroadcastPacket(const Packet& packet);
+
+	inline void UpdateFrequency(float frequency) { updatesPerSecond = frequency; }
 
 	static int GetNextGameObjectId();
 
@@ -58,4 +61,6 @@ private:
 
 	std::unordered_map<int, GameObject*> gameObjects;
 	std::unordered_map<int, DirtyGameObject> dirtyGameObjects; // Contains dirty data that a game object needs to update
+
+	float updatesPerSecond;
 };

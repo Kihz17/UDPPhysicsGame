@@ -11,6 +11,7 @@
 // 2 = PacketSpawnGameObject (Server -> Client)
 // 3 = PacketDestroyGameObject (Server -> Client)
 // 4 = PacketUpdateGameObjectPositions (Server -> Client)
+// 5 = PacketServerShutdown (Server -> Client)
 void PacketHandler::HandlePacket(int packetType, Buffer& buffer, Server* server)
 {
 	if (packetType == 0) // Player moved

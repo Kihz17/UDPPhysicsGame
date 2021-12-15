@@ -16,6 +16,7 @@ public:
 	void OnUpdate(float deltaTime);
 
 	void AddGameObject(int id, GameObjectType type, float x, float y, float z);
+
 	void RemoveGameObject(int id);
 	ClientGameObject* GetGameObject(int id);
 

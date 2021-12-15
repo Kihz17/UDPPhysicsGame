@@ -11,7 +11,9 @@ PlayerController::PlayerController(int id, Ref<Camera> camera, const glm::vec3& 
 	: ClientPlayer(id, glm::mat4(1.0f)),
 	camera(camera), 
 	handleInput(true), 
-	requestId(0)
+	requestId(0),
+	lastSpacePress(10000.0f),
+	jumpCount(0)
 {
 	transform[3].x = position.x;
 	transform[3].y = position.y;
@@ -20,6 +22,8 @@ PlayerController::PlayerController(int id, Ref<Camera> camera, const glm::vec3& 
 
 void PlayerController::OnUpdate(float deltaTime)
 {
+	lastSpacePress += deltaTime;
+
 	if (handleInput)
 	{
 		camera->MoveCamera(Input::GetMouseX(), Input::GetMouseY());
@@ -53,7 +57,21 @@ void PlayerController::OnUpdate(float deltaTime)
 			force += right * PlayerInfo::PlayerMoveSpeed;
 		}
 
-		std::cout << "X: " << force.x << "Y: " << force.y << "Z: " << force.z << std::endl;
+		bool spacePressed = Input::IsKeyPressed(Key::Space);
+	/*	if (spacePressed)
+		{
+			std::cout << "Space\n";
+		}*/
+
+		if (jumpCount < 2 && Input::IsKeyPressed(Key::Space) && lastSpacePress >= 0.5f)
+		{
+			lastSpacePress = 0.0f;
+			force.y += PlayerInfo::PlayerJumpForce;
+    		jumpCount++;
+		}
+
+		//std::cout << "SpacePress: " << lastSpacePress << std::endl;
+		//std::cout << "X: " << force.x << "Y: " << force.y << "Z: " << force.z << std::endl;
 		ApplyForce(force); // Apply force from player controls
 	}
 

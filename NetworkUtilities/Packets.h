@@ -5,3 +5,4 @@
 #include "PacketPlayerConnectSuccess.h"
 #include "PacketRemoveGameObject.h"
 #include "PacketUpdateGameObjectPositions.h"
+#include "PacketServerShutdown.h"

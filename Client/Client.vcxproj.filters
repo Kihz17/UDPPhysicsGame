@@ -49,6 +49,12 @@
     <Filter Include="Source Files\Graphics\Saveable">
       <UniqueIdentifier>{f335f5ed-d014-4c4a-9cbc-3adc21b45f5e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Physics\ClientGameObjects">
+      <UniqueIdentifier>{9900159d-1b8e-4e52-9d63-8e6b64fbb072}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics\ClientGameObjects">
+      <UniqueIdentifier>{f20f46a3-1981-4cd0-90df-de64009568dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -61,9 +67,6 @@
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="World.h">
-      <Filter>Header Files\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="ClientPlayer.h">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
@@ -129,14 +132,8 @@
     <ClInclude Include="Light.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="YAMLOverloads.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerController.h">
       <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="ClientGameObject.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SaveableTexture.h">
       <Filter>Header Files\Graphics\Saveable</Filter>
@@ -156,6 +153,18 @@
     <ClInclude Include="SaveableCollider.h">
       <Filter>Header Files\Graphics\Saveable</Filter>
     </ClInclude>
+    <ClInclude Include="ClientPlayer.h">
+      <Filter>Header Files\Physics\ClientGameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientGameObject.h">
+      <Filter>Header Files\Physics\ClientGameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientSphere.h">
+      <Filter>Header Files\Physics\ClientGameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="YAMLOverloads.h">
+      <Filter>Header Files\Graphics\Saveable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -168,9 +177,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="World.cpp">
-      <Filter>Source Files\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="ClientPlayer.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
     <ClCompile Include="glad.c">
@@ -221,14 +227,8 @@
     <ClCompile Include="Light.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="YAMLOverloads.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerController.cpp">
       <Filter>Source Files\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="ClientGameObject.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SaveableTexture.cpp">
       <Filter>Source Files\Graphics\Textures</Filter>
@@ -249,6 +249,15 @@
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
     <ClCompile Include="SaveableCollider.cpp">
+      <Filter>Source Files\Graphics\Saveable</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientPlayer.cpp">
+      <Filter>Source Files\Physics\ClientGameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientGameObject.cpp">
+      <Filter>Source Files\Physics\ClientGameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="YAMLOverloads.cpp">
       <Filter>Source Files\Graphics\Saveable</Filter>
     </ClCompile>
   </ItemGroup>

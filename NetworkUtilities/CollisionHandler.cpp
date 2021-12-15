@@ -202,6 +202,9 @@ bool CollisionHandler::HandleSphereToMesh(ContactInstance* contactInstance, size
 			continue;
 		}
 
+		obj1->ResetJump();
+		if (obj2) obj2->ResetJump();
+
 		// We have made contact!
 		contactInstance->contactNormal = normal;
 		contactInstance->obj1 = obj1;

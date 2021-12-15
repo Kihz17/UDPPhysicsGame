@@ -74,6 +74,8 @@ int main(int argc, char** argv)
 
 	client.CreateSocket("173.34.12.232", 5149);
 
+	const glm::vec3 cameraOffset(0.0f, 2.0f, 0.0f);
+
 	int ch;
 	float fpsFrameCount = 0.f;
 	float fpsTimeElapsed = 0.f;
@@ -130,18 +132,19 @@ int main(int argc, char** argv)
 			collisionContainer->OnUpdate(deltaTime, gameObjects);
 		}
 
+		scene.OnUpdate(client.GetCamera()->position, deltaTime);
+
 		if (client.GetPlayerController())
 		{
-			client.GetCamera()->position = glm::vec3(client.GetPlayerController()->GetTransform()[3]); // Update camera with controller after collisions take place
+			glm::mat4& clientTransform = client.GetPlayerController()->GetTransform();
+			client.GetCamera()->position = glm::vec3(clientTransform[3]) + cameraOffset + (client.GetCamera()->direction * -30.0f); // Update camera with controller after collisions take place
+			Renderer::RenderMeshWithTextures(shader, player, playerTextures, clientTransform, 1.0f);
 		}
-
-		scene.OnUpdate(client.GetCamera()->position, deltaTime);
 
 		std::unordered_map<int, ClientGameObject*>::iterator it = world->begin();
 		while (it != world->end())
 		{
 			GameObject* obj = it->second;
-			glm::mat4 transform = obj->GetTransformSafe();
 			Renderer::RenderMeshWithTextures(shader, player, playerTextures, obj->GetTransform(), 1.0f);
 			it++;
 		}
