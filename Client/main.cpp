@@ -84,6 +84,24 @@ int main(int argc, char** argv)
 	{
 		if (Input::IsKeyPressed(Key::PageUp)) break;
 
+		if (Input::IsKeyPressed(Key::One))
+		{
+			client.UpdateFrequency(1.0f);
+		}
+		else if (Input::IsKeyPressed(Key::Two))
+		{
+			client.UpdateFrequency(10.0f);
+		}
+		else if (Input::IsKeyPressed(Key::Three))
+		{
+			client.UpdateFrequency(60.0f);
+		}
+		else if (Input::IsKeyPressed(Key::Four))
+		{
+			client.UpdateFrequency(100.0f);
+		}
+		
+
 		float currentTime = static_cast<float>(glfwGetTime());
 		float deltaTime = currentTime - previousTime;
 		previousTime = currentTime;

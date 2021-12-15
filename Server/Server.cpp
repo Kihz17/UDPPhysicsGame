@@ -138,7 +138,6 @@ void Server::ReadData()
 
 	unsigned short port = from.sin_port;
 	Player* player = GetPlayer(port, from);
-
 	int packetType = buffer.ReadUInt32LE();
 	if (packetType == 99999999) return; // This is a garbage packet that is sent on client inital connection to stop WSA10022 error
 	PacketHandler::HandlePacket(packetType, buffer, this); // TODO: Ensure that a client isn't faking their GameObject ID

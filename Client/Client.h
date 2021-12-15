@@ -35,6 +35,7 @@ public:
 	void CreateSocket(const std::string& ip, int port);
 
 	void OnUpdate(float deltaTime);
+	inline void UpdateFrequency(float frequency) { updatesPerSecond = frequency; };
 
 	void Send(Packet& packet);
 	void Send(Buffer& buffer);
@@ -63,4 +64,6 @@ private:
 
 	PlayerController* playerController;
 	Ref<Camera> camera;
+
+	float updatesPerSecond;
 };

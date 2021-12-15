@@ -4,6 +4,9 @@
 
 #include <Packets.h>
 
+std::clock_t curr;
+std::clock_t prev;
+
 float lastInputUpdate = 0.0f;
 
 void _PrintWSAError(const char* file, int line)
@@ -23,7 +26,8 @@ Client::Client(World* world)
 	serverSocket(INVALID_SOCKET),
 	ourId(-1),
 	camera(CreateRef<Camera>(windowWidth, windowHeight)),
-	playerController(nullptr)
+	playerController(nullptr),
+	updatesPerSecond(20.0f)
 {
 	WSAData WSAData;
 	int	iResult;
@@ -80,6 +84,7 @@ void Client::CreateSocket(const std::string& ip, int port)
 	printf("[CLIENT] Server IP: %s\n", ipv4);
 	printf("[CLIENT] Server Port: %d\n", htons(toAddress.sin_port));
 	printf("[CLIENT] READY\n");
+	prev = std::clock();
 }
 
 void Client::OnUpdate(float deltaTime)
@@ -101,13 +106,15 @@ void Client::OnUpdate(float deltaTime)
 		}
 	}
 
-	lastInputUpdate += deltaTime;
+	curr = std::clock();
+	lastInputUpdate = (curr - prev) / double(CLOCKS_PER_SEC);
 	if (playerController)
 	{
 		playerController->OnUpdate(deltaTime);
-		if (lastInputUpdate >= 0.016f) // Only send inputs 60 times a second
+
+		if (lastInputUpdate >= (1.0f / updatesPerSecond))
 		{
-			lastInputUpdate = 0.0f;
+			prev = curr;
 
 			int moveStateId = playerController->NextMoveRequestId();
 			glm::vec3 position = glm::vec3(playerController->GetTransform()[3]);
@@ -143,6 +150,7 @@ void Client::OnUpdate(float deltaTime)
 		return;
 	}
 
+	printf("Got Packet\n");
 	lastPacketTime = 0.0f;
 	int packetType = buffer.ReadUInt32LE();
 	PacketHandler::HandlePacket(packetType, buffer, this);
