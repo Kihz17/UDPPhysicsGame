@@ -39,7 +39,8 @@ Server::Server()
 	: isRunning(false),
 	listenSocket(INVALID_SOCKET),
 	acceptSocket(INVALID_SOCKET),
-	updatesPerSecond(20.0f)
+	updatesPerSecond(20.0f),
+	gameOver(false)
 {
 	WSAData WSAData;
 	int	iResult;
@@ -150,7 +151,7 @@ void Server::ReadData()
 	Player* player = GetPlayer(port, from);
 	int packetType = buffer.ReadUInt32LE();
 	if (packetType == 99999999) return; // This is a garbage packet that is sent on client inital connection to stop WSA10022 error
-	PacketHandler::HandlePacket(packetType, buffer, this); // TODO: Ensure that a client isn't faking their GameObject ID
+	PacketHandler::HandlePacket(packetType, buffer, this, player); // TODO: Ensure that a client isn't faking their GameObject ID
 }
 
 Player* Server::GetPlayer(unsigned short port, struct sockaddr_in fromSocket)
@@ -219,6 +220,8 @@ void Server::BroadcastUpdate()
 		std::unordered_map<int, GameObject*>::iterator it = gameObjects.begin();
 		while (it != gameObjects.end())
 		{
+			if (it->second->isDead()) continue; // We don't care about dead objects
+
 			GameObjectMoveUpdate update;
 			update.gameObjectId = it->second->GetId();
 			update.requestId = it->second->lastMoveRequestId;
@@ -347,5 +350,53 @@ void Server::OnShutdown()
 
 void Server::UpdateGameState()
 {
+	if (gameOver)
+	{
+		if (readiedPlayers.size() >= players.size()) // All the players a ready
+		{
+			// Broadcast spawn packet for all players to each player (this will respawn dead players, and re-enable player controls)
+			std::unordered_map<unsigned short, Player*>::iterator playerIt = players.begin();
+			while (playerIt != players.end())
+			{
+				Player* p = playerIt->second;
+				glm::vec3 spawnPos = GetRandomSpawnPoint();
+				PacketSpawnGameObject spawnPacket(p->GetId(), p->GetType(), spawnPos.x, spawnPos.y, spawnPos.z);
+				BroadcastPacket(spawnPacket);
+				playerIt++;
+			}
 
+			gameOver = false;
+		}
+		return;
+	}
+
+	if (players.size() >= 2)
+	{
+		int deadCount = 0;
+		std::unordered_map<unsigned short, Player*>::iterator playerIt = players.begin();
+		while (playerIt != players.end())
+		{
+			Player* p = playerIt->second;
+			if (p->isDead()) // We are already dead
+			{
+				deadCount++;
+				continue;
+			}
+
+			if (p->GetTransform()[3].y <= -20.0f) // We've fallen below the map, kill
+			{
+				p->SetDead(true);
+				PacketRemoveGameObject destroyPacket(p->GetId());
+				BroadcastPacket(destroyPacket);
+			}
+
+			playerIt++;
+		}
+
+		if (deadCount >= players.size() - 1) // All dead, or last man standing
+		{
+			readiedPlayers.clear();
+			gameOver = true;
+		}
+	}
 }

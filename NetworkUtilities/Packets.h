@@ -6,3 +6,4 @@
 #include "PacketRemoveGameObject.h"
 #include "PacketUpdateGameObjectPositions.h"
 #include "PacketServerShutdown.h"
+#include "PacketReadyUp.h"

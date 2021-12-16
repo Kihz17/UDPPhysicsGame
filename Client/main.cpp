@@ -10,7 +10,6 @@
 #include "Shader.h"
 #include "Mesh.h"
 #include "StaticScene.h"
-#include "CollisionContainer.h"
 
 #include <conio.h>
 #include <sstream>
@@ -22,7 +21,7 @@ static void error_callback(int error, const char* description)
 
 int main(int argc, char** argv)
 {
-	World* world = new World();
+	World* world = new World(200);
 
 	Client client(world);
 
@@ -66,10 +65,8 @@ int main(int argc, char** argv)
 	DiscardTexture::InitializeUniforms(shader);
 	AlphaTexture::InitializeUniforms(shader);
 
-	CollisionContainer* collisionContainer = new CollisionContainer(100);
-
 	StaticScene scene(shader);
-	scene.Load("scene.yaml", collisionContainer);
+	scene.Load("scene.yaml", world);
 
 	client.CreateSocket("127.0.0.1", 5149);
 
@@ -129,51 +126,32 @@ int main(int argc, char** argv)
 		}
 
 		client.OnUpdate(deltaTime);
+
 		if (client.IsConnected())
 		{	
 			world->OnUpdate(deltaTime);
 		}
-	
-		// Handle collisions
-		{
-			std::vector<GameObject*> gameObjects;
-			if (client.GetPlayerController())
-			{
-				gameObjects.push_back(client.GetPlayerController());
-			}
-		
-			std::unordered_map<int, ClientGameObject*>::iterator it = world->begin();
-			while (it != world->end())
-			{
-				gameObjects.push_back(it->second);
-				it++;
-			}
 
-			collisionContainer->OnUpdate(deltaTime, gameObjects);
+		if (client.GetPlayerController()) // Update camera with controller
+		{
+			glm::mat4& clientTransform = client.GetPlayerController()->GetTransform();
+			client.GetCamera()->position = glm::vec3(clientTransform[3]) + cameraOffset + (client.GetCamera()->direction * -30.0f);
 		}
 
 		scene.OnUpdate(client.GetCamera()->position, deltaTime);
 
-		if (client.GetPlayerController())
+		for (ClientGameObject * go : world->GetGameObjects())
 		{
-			glm::mat4& clientTransform = client.GetPlayerController()->GetTransform();
-			client.GetCamera()->position = glm::vec3(clientTransform[3]) + cameraOffset + (client.GetCamera()->direction * -30.0f); // Update camera with controller after collisions take place
-			Renderer::RenderMeshWithTextures(shader, player, playerTextures, clientTransform, 1.0f);
-		}
-
-		std::unordered_map<int, ClientGameObject*>::iterator it = world->begin();
-		while (it != world->end())
-		{
-			GameObject* obj = it->second;
-			Renderer::RenderMeshWithTextures(shader, player, playerTextures, obj->GetTransform(), 1.0f);
-			it++;
+			glm::mat4 transform = go->GetTransform();
+			float scale = 0.41f * go->radius;
+			transform *= glm::scale(glm::mat4(1.0f), glm::vec3(scale, scale, scale));
+			Renderer::RenderMeshWithTextures(shader, player, playerTextures, go->GetTransform(), 1.0f);
 		}
 
 		Renderer::EndFrame();
 	}
 
 	delete world;
-	delete collisionContainer;
 
 	glfwDestroyWindow(window); // Clean up the window
 

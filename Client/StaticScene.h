@@ -5,7 +5,7 @@
 #include "EnvironmentMap.h"
 #include "Light.h"
 #include "Camera.h"
-#include "CollisionContainer.h"
+#include "World.h"
 
 #include <glm/glm.hpp>
 
@@ -19,7 +19,7 @@ public:
 	StaticScene(Ref<Shader> shader);
 
 	void Save(const std::string& path);
-	void Load(const std::string& path, CollisionContainer* collisionContainer);
+	void Load(const std::string& path, World* world);
 
 	inline void SetEnvMap(const Ref<EnvironmentMap> envMap) { this->envMap = envMap; }
 

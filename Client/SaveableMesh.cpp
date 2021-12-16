@@ -9,7 +9,7 @@ SaveableMesh::SaveableMesh(Ref<Mesh> mesh)
 	scale(1.0f, 1.0f, 1.0f),
 	alphaTransparency(1.0f),
 	hasAlphaTransparentTexture(false),
-	collider(CollisionHandlerType::None, nullptr, 0.0f)
+	collider(ColliderType::None, nullptr, 0.0f)
 {
 
 }
@@ -37,7 +37,7 @@ void SaveableMesh::Save(YAML::Emitter& emitter) const
 	}
 	emitter << YAML::EndSeq;
 
-	if (collider.colliderType != CollisionHandlerType::None) 
+	if (collider.colliderType != ColliderType::None) 
 	{
 		emitter << YAML::Key << "Collider" << YAML::Value;
 		collider.Save(emitter);

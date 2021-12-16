@@ -147,9 +147,6 @@
     <ClInclude Include="UUID.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionContainer.h">
-      <Filter>Header Files\Physics</Filter>
-    </ClInclude>
     <ClInclude Include="SaveableCollider.h">
       <Filter>Header Files\Graphics\Saveable</Filter>
     </ClInclude>
@@ -244,9 +241,6 @@
     </ClCompile>
     <ClCompile Include="UUID.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionContainer.cpp">
-      <Filter>Source Files\Physics</Filter>
     </ClCompile>
     <ClCompile Include="SaveableCollider.cpp">
       <Filter>Source Files\Graphics\Saveable</Filter>

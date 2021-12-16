@@ -4,19 +4,39 @@
 #include <PlayerInfo.h>
 #include <iostream>
 
-World::World()
+World::World(size_t maxContacts, size_t iterations)
+	: player(nullptr), contactResolver(iterations)
 {
-
+	this->calculateIterations = (iterations == 0);
+	this->contacts = new ContactInstance[maxContacts];
+	this->maxContacts = maxContacts;
 }
 
 World::~World()
 {
+	for (IContactGenerator* generator : this->contactGenerators)
+	{
+		delete generator;
+	}
 
+	delete[] this->contacts;
 }
 
 void World::OnUpdate(float deltaTime)
 {
 	UpdateGameObjects(deltaTime);
+
+	size_t contactsGenerated = GenerateContacts();
+
+	if (contactsGenerated)
+	{
+		if (this->calculateIterations)
+		{
+			this->contactResolver.SetIterations(contactsGenerated * 2);
+		}
+
+		this->contactResolver.ResolveContacts(this->contacts, contactsGenerated, deltaTime);
+	}
 }
 
 void World::AddGameObject(int id, GameObjectType type, float x, float y, float z)
@@ -62,6 +82,11 @@ ClientGameObject* World::GetGameObject(int id)
 
 void World::UpdateGameObjects(float deltaTime)
 {
+	if (player)
+	{
+		player->Update(deltaTime);
+	}
+
 	{
 		std::unordered_map<int, ClientGameObject*>::iterator it = gameObjects.begin();
 		while (it != gameObjects.end())
@@ -84,4 +109,77 @@ void World::UpdateGameObjects(float deltaTime)
 			it++;
 		}
 	}
+}
+
+size_t World::GenerateContacts()
+{
+	size_t contactLimit = this->maxContacts;
+	ContactInstance* currentContact = this->contacts;
+
+	std::vector<GameObject*> gameObjects;
+	for(ClientGameObject* go : GetGameObjects()) gameObjects.push_back(go);
+
+	for (IContactGenerator* generator : this->contactGenerators)
+	{
+		size_t contactsGenerated = generator->AddContact(gameObjects, currentContact, contactLimit); // Creates contacts, and returns the amount of contacts generated
+		contactLimit -= contactsGenerated;
+		currentContact += contactsGenerated; // Move to our next available position in the contacts array
+
+		if (contactLimit <= 0)
+		{
+			std::cout << "WARNING: We have created too many contacts to process!" << std::endl;
+			break;
+		}
+	}
+
+	return this->maxContacts - contactLimit; // Return the amount of contacts generated
+}
+
+std::vector<ClientGameObject*> World::GetGameObjects()
+{
+	std::vector<ClientGameObject*> objects;
+
+	if(player) objects.push_back(player);
+
+	std::unordered_map<int, ClientGameObject*>::iterator it = gameObjects.begin();
+	while (it != gameObjects.end())
+	{
+		objects.push_back(it->second);
+		it++;
+	}
+	return objects;
+}
+
+bool World::AddContactGenerator(IContactGenerator* generator)
+{
+	if (!generator)
+	{
+		return false;
+	}
+
+	std::vector<IContactGenerator*>::iterator it = std::find(this->contactGenerators.begin(), this->contactGenerators.end(), generator);
+	if (it == this->contactGenerators.end())
+	{
+		this->contactGenerators.push_back(generator);
+		return true;
+	}
+
+	return false;
+}
+
+bool World::RemoveContactGenerator(IContactGenerator* generator)
+{
+	if (!generator)
+	{
+		return false;
+	}
+
+	std::vector<IContactGenerator*>::iterator it = std::find(this->contactGenerators.begin(), this->contactGenerators.end(), generator);
+	if (it == this->contactGenerators.end())
+	{
+		return false;
+	}
+
+	this->contactGenerators.erase(it);
+	return true;
 }

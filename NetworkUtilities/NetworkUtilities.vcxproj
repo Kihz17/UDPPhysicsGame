@@ -143,19 +143,16 @@
   <ItemGroup>
     <ClInclude Include="AABB.h" />
     <ClInclude Include="Buffer.h" />
-    <ClInclude Include="CollisionHandler.h" />
-    <ClInclude Include="CollisionObjects.h" />
+    <ClInclude Include="ColliderObjects.h" />
     <ClInclude Include="ContactInstance.h" />
     <ClInclude Include="ContactResolver.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="GameObjectToAABBContactGenerator.h" />
-    <ClInclude Include="GameObjectToGameObjectContactGenerator.h" />
-    <ClInclude Include="GameObjectToMeshContactGenerator.h" />
-    <ClInclude Include="GameObjectToSphereContactGenerator.h" />
     <ClInclude Include="IContactGenerator.h" />
+    <ClInclude Include="MeshContactGenerator.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="PacketPlayerConnectSuccess.h" />
     <ClInclude Include="PacketPlayerInput.h" />
+    <ClInclude Include="PacketReadyUp.h" />
     <ClInclude Include="PacketRemoveGameObject.h" />
     <ClInclude Include="Packets.h" />
     <ClInclude Include="PacketServerShutdown.h" />
@@ -167,16 +164,13 @@
   <ItemGroup>
     <ClCompile Include="AABB.cpp" />
     <ClCompile Include="Buffer.cpp" />
-    <ClCompile Include="CollisionHandler.cpp" />
     <ClCompile Include="ContactInstance.cpp" />
     <ClCompile Include="ContactResolver.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="GameObjectToAABBContactGenerator.cpp" />
-    <ClCompile Include="GameObjectToGameObjectContactGenerator.cpp" />
-    <ClCompile Include="GameObjectToMeshContactGenerator.cpp" />
-    <ClCompile Include="GameObjectToSphereContactGenerator.cpp" />
+    <ClCompile Include="MeshContactGenerator.cpp" />
     <ClCompile Include="PacketPlayerConnectSuccess.cpp" />
     <ClCompile Include="PacketPlayerInput.cpp" />
+    <ClCompile Include="PacketReadyUp.cpp" />
     <ClCompile Include="PacketRemoveGameObject.cpp" />
     <ClCompile Include="PacketServerShutdown.cpp" />
     <ClCompile Include="PacketSpawnGameObject.cpp" />

@@ -2,19 +2,29 @@
 #include "Mesh.h"
 
 #include <GameObject.h>
+#include <ColliderObjects.h>
+
 #include <string>
 #include <yaml-cpp/yaml.h>
+
+enum class ColliderType
+{
+	None = 0,
+	Sphere,
+	AABB,
+	Mesh
+};
 
 class SaveableCollider
 {
 public:
-	SaveableCollider(CollisionHandlerType colliderType, void* collider, float bounciness);
+	SaveableCollider(ColliderType colliderType, void* collider, float bounciness);
 	~SaveableCollider() = default;
 
 	virtual void Save(YAML::Emitter& emitter) const;
 	static SaveableCollider StaticLoad(Ref<Mesh> mesh, const YAML::Node& node);
 
-	CollisionHandlerType colliderType;
+	ColliderType colliderType;
 	void* collider;
 	float bounciness;
 };

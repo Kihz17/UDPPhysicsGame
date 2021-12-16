@@ -16,12 +16,6 @@
     <Filter Include="Header Files\Physics">
       <UniqueIdentifier>{1a1d4648-cf62-4744-82bc-736098177f52}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\PacketHandlers">
-      <UniqueIdentifier>{71bb9b46-0c01-469f-930b-f5d2c49b52e3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\PacketHandlers">
-      <UniqueIdentifier>{0d4c252c-86f7-42bd-8138-5a2160b2efa8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Physics">
       <UniqueIdentifier>{50ac20d6-817d-44b2-a80d-db1f13d2b7f7}</UniqueIdentifier>
     </Filter>
@@ -37,7 +31,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PacketHandler.cpp">
-      <Filter>Source Files\PacketHandlers</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -51,7 +45,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PacketHandler.h">
-      <Filter>Header Files\PacketHandlers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

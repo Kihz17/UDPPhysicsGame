@@ -13,14 +13,14 @@ PlayerController::PlayerController(int id, Ref<Camera> camera, const glm::vec3& 
 	handleInput(true), 
 	requestId(0),
 	lastSpacePress(10000.0f),
-	jumpCount(0)
+	jumpCount(0),
+	canMove(true)
 {
-	transform[3].x = position.x;
-	transform[3].y = position.y;
-	transform[3].z = position.z;
+	transform *= glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 2.0f, 2.0f));
+	transform *= glm::translate(glm::mat4(1.0f), position);
 }
 
-void PlayerController::OnUpdate(float deltaTime)
+void PlayerController::UpdateController(float deltaTime)
 {
 	lastSpacePress += deltaTime;
 
@@ -28,56 +28,54 @@ void PlayerController::OnUpdate(float deltaTime)
 	{
 		camera->MoveCamera(Input::GetMouseX(), Input::GetMouseY());
 
-		glm::vec3 movementDirection = camera->direction;
-		movementDirection.y = 0.0f;
-		movementDirection = glm::normalize(movementDirection);
-
-		glm::vec3 force(0.0f, 0.0f, 0.0f);
-
-		glm::vec3 newPosition = glm::vec3(transform[3]);
-		if (Input::IsKeyPressed(Key::W))
+		if (canMove)
 		{
-			force += movementDirection * PlayerInfo::PlayerMoveSpeed;
-		}
-		else if (Input::IsKeyPressed(Key::S))
-		{
-			force += movementDirection * -PlayerInfo::PlayerMoveSpeed;
-		}
+			glm::vec3 movementDirection = camera->direction;
+			movementDirection.y = 0.0f;
+			movementDirection = glm::normalize(movementDirection);
 
-		if (Input::IsKeyPressed(Key::A))
-		{
-			constexpr float theta = glm::radians(90.0f);
-			glm::vec3 left(movementDirection.x * cos(theta) + movementDirection.z * sin(theta), 0.0f, -movementDirection.x * sin(theta) + movementDirection.z * cos(theta));
-			force += left * PlayerInfo::PlayerMoveSpeed;
-		}
-		else if (Input::IsKeyPressed(Key::D))
-		{
-			constexpr float theta = glm::radians(-90.0f);
-			glm::vec3 right(movementDirection.x * cos(theta) + movementDirection.z * sin(theta), 0.0f, -movementDirection.x * sin(theta) + movementDirection.z * cos(theta));
-			force += right * PlayerInfo::PlayerMoveSpeed;
-		}
+			glm::vec3 force(0.0f, 0.0f, 0.0f);
 
-		bool spacePressed = Input::IsKeyPressed(Key::Space);
-	/*	if (spacePressed)
-		{
-			std::cout << "Space\n";
-		}*/
+			glm::vec3 newPosition = glm::vec3(transform[3]);
+			if (Input::IsKeyPressed(Key::W))
+			{
+				force += movementDirection * PlayerInfo::PlayerMoveSpeed;
+			}
+			else if (Input::IsKeyPressed(Key::S))
+			{
+				force += movementDirection * -PlayerInfo::PlayerMoveSpeed;
+			}
 
-		if (jumpCount < 2 && Input::IsKeyPressed(Key::Space) && lastSpacePress >= 0.5f)
-		{
-			lastSpacePress = 0.0f;
-			force.y += PlayerInfo::PlayerJumpForce;
-    		jumpCount++;
-		}
+			if (Input::IsKeyPressed(Key::A))
+			{
+				constexpr float theta = glm::radians(90.0f);
+				glm::vec3 left(movementDirection.x * cos(theta) + movementDirection.z * sin(theta), 0.0f, -movementDirection.x * sin(theta) + movementDirection.z * cos(theta));
+				force += left * PlayerInfo::PlayerMoveSpeed;
+			}
+			else if (Input::IsKeyPressed(Key::D))
+			{
+				constexpr float theta = glm::radians(-90.0f);
+				glm::vec3 right(movementDirection.x * cos(theta) + movementDirection.z * sin(theta), 0.0f, -movementDirection.x * sin(theta) + movementDirection.z * cos(theta));
+				force += right * PlayerInfo::PlayerMoveSpeed;
+			}
 
-		//std::cout << "SpacePress: " << lastSpacePress << std::endl;
-		//std::cout << "X: " << force.x << "Y: " << force.y << "Z: " << force.z << std::endl;
-		ApplyForce(force); // Apply force from player controls
+			bool spacePressed = Input::IsKeyPressed(Key::Space);
+
+			if (jumpCount < 2 && Input::IsKeyPressed(Key::Space) && lastSpacePress >= 0.5f)
+			{
+				lastSpacePress = 0.0f;
+				force.y += PlayerInfo::PlayerJumpForce;
+				jumpCount++;
+			}
+
+			ApplyForce(force); // Apply force from player controls
+		}	
 	}
 
-	ApplyForce(PlayerInfo::Gravity * GetMass()); // Apply gravity
-
-	Update(deltaTime); // Move
+	if (canMove)
+	{
+		ApplyForce(PlayerInfo::Gravity * GetMass()); // Apply gravity
+	}
 }
 
 void PlayerController::ToggleHandleInput(bool state)
@@ -124,4 +122,9 @@ void PlayerController::ValidateMoveState(int requestId, const glm::vec3& positio
 	}
 
 	RemoveMoveStateAt(requestId); // Remove this state and all states before it
+}
+
+void PlayerController::Update(float deltaTime)
+{
+	ClientPlayer::Update(deltaTime);
 }

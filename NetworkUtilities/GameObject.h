@@ -3,24 +3,12 @@
 #include <glm/glm.hpp>
 
 #include <unordered_set>
-enum class CollisionHandlerType
-{
-	None = 0,
-	Cuboid,
-	Sphere,
-	Mesh
-};
 
 enum class GameObjectType
 {
 	Player = 0,
 	Cuboid,
 	Sphere,
-};
-
-enum class ConstraintEntityType
-{
-	FerrisWheel
 };
 
 struct DirtyGameObject
@@ -41,7 +29,9 @@ public:
 		bounciness(bounciness),
 		acceleration(0.0f),
 		damping(0.9f), 
-		appliedForce(0.0f)
+		appliedForce(0.0f),
+		dead(false),
+		radius(1.0f)
 	{
 		SetMass(mass);
 	}
@@ -73,8 +63,8 @@ public:
 
 	virtual void ResetJump() {}
 
-	virtual void* GetColliderObject() = 0;
-	virtual CollisionHandlerType GetCollisionHandlerType() const = 0;
+	inline void SetDead(bool dead) { this->dead = dead; }
+	inline virtual bool isDead() const { return dead; }
 
 	inline virtual void UpdatePosition(const glm::vec3& position)
 	{
@@ -92,6 +82,7 @@ public:
 
 	int lastMoveRequestId;
 	float bounciness;
+	float radius;
 
 protected:
 	int id;
@@ -104,4 +95,6 @@ protected:
 
 	glm::vec3 acceleration;
 	glm::vec3 appliedForce;
+
+	bool dead;
 };

@@ -14,6 +14,7 @@
 
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -39,6 +40,8 @@ public:
 
 	float deltaTime;
 private:
+	friend class PacketHandler;
+
 	void SetNonBlocking(SOCKET socket);
 	void ReadData();
 	Player* GetPlayer(unsigned short port, struct sockaddr_in fromSocket);
@@ -65,4 +68,7 @@ private:
 	std::unordered_map<int, DirtyGameObject> dirtyGameObjects; // Contains dirty data that a game object needs to update
 
 	float updatesPerSecond;
+
+	std::unordered_set<Player*> readiedPlayers;
+	bool gameOver;
 };

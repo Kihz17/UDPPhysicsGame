@@ -31,15 +31,6 @@
     <Filter Include="Source Files\Physics\ContactGenerators">
       <UniqueIdentifier>{6af961f7-148d-4fe0-b297-9e8a2ae02714}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Physics\CollisionHandlers">
-      <UniqueIdentifier>{53fbda04-2c17-4704-9058-507a699e7884}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Physics\GameObjects">
-      <UniqueIdentifier>{6c6ab7ae-34a7-40ec-b945-7d68fcd8f496}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Physics\GameObjects">
-      <UniqueIdentifier>{281521cd-9f83-423f-81e1-d894b246618e}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buffer.h">
@@ -81,32 +72,23 @@
     <ClInclude Include="ContactResolver.h">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjectToGameObjectContactGenerator.h">
-      <Filter>Header Files\Physics\ContactGenerators</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionHandler.h">
-      <Filter>Header Files\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionObjects.h">
-      <Filter>Header Files\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjectToAABBContactGenerator.h">
-      <Filter>Header Files\Physics\ContactGenerators</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjectToSphereContactGenerator.h">
-      <Filter>Header Files\Physics\ContactGenerators</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjectToMeshContactGenerator.h">
-      <Filter>Header Files\Physics\ContactGenerators</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files\Physics\GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="IContactGenerator.h">
       <Filter>Header Files\Physics\ContactGenerators</Filter>
     </ClInclude>
     <ClInclude Include="PacketServerShutdown.h">
       <Filter>Header Files\Packets</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketReadyUp.h">
+      <Filter>Header Files\Packets</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderObjects.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshContactGenerator.h">
+      <Filter>Header Files\Physics\ContactGenerators</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -143,26 +125,17 @@
     <ClCompile Include="ContactResolver.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjectToGameObjectContactGenerator.cpp">
-      <Filter>Source Files\Physics\ContactGenerators</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionHandler.cpp">
-      <Filter>Source Files\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjectToAABBContactGenerator.cpp">
-      <Filter>Source Files\Physics\ContactGenerators</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjectToSphereContactGenerator.cpp">
-      <Filter>Source Files\Physics\ContactGenerators</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjectToMeshContactGenerator.cpp">
-      <Filter>Source Files\Physics\ContactGenerators</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files\Physics\GameObjects</Filter>
-    </ClCompile>
     <ClCompile Include="PacketServerShutdown.cpp">
       <Filter>Source Files\Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketReadyUp.cpp">
+      <Filter>Source Files\Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshContactGenerator.cpp">
+      <Filter>Source Files\Physics\ContactGenerators</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

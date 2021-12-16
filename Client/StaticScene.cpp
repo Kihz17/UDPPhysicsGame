@@ -3,9 +3,7 @@
 #include "Renderer.h"
 #include "YAMLOverloads.h"
 
-#include <GameObjectToSphereContactGenerator.h>
-#include <GameObjectToAABBContactGenerator.h>
-#include <GameObjectToMeshContactGenerator.h>
+#include <MeshContactGenerator.h>
 
 #include <sstream>
 #include <fstream>
@@ -57,7 +55,7 @@ void StaticScene::Save(const std::string& path)
 	ofs << out.c_str();
 }
 
-void StaticScene::Load(const std::string& path, CollisionContainer* collisionContainer)
+void StaticScene::Load(const std::string& path, World* world)
 {
 	std::ifstream ifs(path);
 	if (!ifs.good())
@@ -116,12 +114,8 @@ void StaticScene::Load(const std::string& path, CollisionContainer* collisionCon
 			Ref<SaveableMesh> meshData = SaveableMesh::StaticLoad(node);
 
 			// Load collision data if the mesh has any 
-			CollisionHandlerType collisionType = meshData->collider.colliderType;
-			if (collisionType == CollisionHandlerType::Sphere)
-			{
-				collisionContainer->AddGenerator(new GameObjectToSphereContactGenerator((SphereCollider*) meshData->collider.collider, meshData->position, meshData->collider.bounciness));
-			}
-			else if (collisionType == CollisionHandlerType::Cuboid)
+			ColliderType collisionType = meshData->collider.colliderType;
+			if (collisionType == ColliderType::Mesh)
 			{
 				glm::mat4 transform(1.0f);
 				transform *= glm::translate(glm::mat4(1.0f), meshData->position);
@@ -130,18 +124,7 @@ void StaticScene::Load(const std::string& path, CollisionContainer* collisionCon
 				transform *= glm::rotate(glm::mat4(1.0f), meshData->orientation.z, glm::vec3(0.0f, 0.0f, 1.0f));
 				transform *= glm::scale(glm::mat4(1.0f), meshData->scale);
 
-				collisionContainer->AddGenerator(new GameObjectToAABBContactGenerator((AABBCollider*)meshData->collider.collider, transform, meshData->collider.bounciness));
-			}
-			if (collisionType == CollisionHandlerType::Mesh)
-			{
-				glm::mat4 transform(1.0f);
-				transform *= glm::translate(glm::mat4(1.0f), meshData->position);
-				transform *= glm::rotate(glm::mat4(1.0f), meshData->orientation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-				transform *= glm::rotate(glm::mat4(1.0f), meshData->orientation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-				transform *= glm::rotate(glm::mat4(1.0f), meshData->orientation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-				transform *= glm::scale(glm::mat4(1.0f), meshData->scale);
-
-				collisionContainer->AddGenerator(new GameObjectToMeshContactGenerator((MeshCollider*)meshData->collider.collider, transform, meshData->collider.bounciness));
+				world->AddContactGenerator(new MeshContactGenerator((MeshCollider*) meshData->collider.collider, transform, meshData->collider.bounciness));
 			}
 	
 			AddMesh(meshData);

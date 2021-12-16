@@ -12,7 +12,8 @@
 // 3 = PacketDestroyGameObject (Server -> Client)
 // 4 = PacketUpdateGameObjectPositions (Server -> Client)
 // 5 = PacketServerShutdown (Server -> Client)
-void PacketHandler::HandlePacket(int packetType, Buffer& buffer, Server* server)
+// 5 = PacketReadyUp (Client -> Server)
+void PacketHandler::HandlePacket(int packetType, Buffer& buffer, Server* server, Player* player)
 {
 	if (packetType == 0) // Player moved
 	{
@@ -39,6 +40,11 @@ void PacketHandler::HandlePacket(int packetType, Buffer& buffer, Server* server)
 
 		gameObject->GetVelocity() = velocity;
 		gameObject->UpdatePosition(newPosition.x, newPosition.y, newPosition.z);
+		return;
+	}
+	else if (packetType == 6) // Ready up packet
+	{
+		server->readiedPlayers.insert(player);
 		return;
 	}
 

@@ -152,7 +152,6 @@
     <ClInclude Include="ClientGameObject.h" />
     <ClInclude Include="ClientPlayer.h" />
     <ClInclude Include="ClientSphere.h" />
-    <ClInclude Include="CollisionContainer.h" />
     <ClInclude Include="DiffuseTexture.h" />
     <ClInclude Include="DiscardTexture.h" />
     <ClInclude Include="EnvironmentMap.h" />
@@ -189,7 +188,6 @@
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="ClientGameObject.cpp" />
     <ClCompile Include="ClientPlayer.cpp" />
-    <ClCompile Include="CollisionContainer.cpp" />
     <ClCompile Include="DiffuseTexture.cpp" />
     <ClCompile Include="DiscardTexture.cpp" />
     <ClCompile Include="EnvironmentMap.cpp" />

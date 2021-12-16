@@ -12,7 +12,7 @@ public:
 	PlayerController(int id, Ref<Camera> camera, const glm::vec3& position);
 	virtual ~PlayerController() = default;
 
-	void OnUpdate(float deltaTime);
+	void UpdateController(float deltaTime);
 
 	void ToggleHandleInput(bool state);
 
@@ -25,10 +25,11 @@ public:
 
 	inline virtual void ResetJump() override { jumpCount = 0; }
 	inline virtual GameObjectType GetType() const override { return GameObjectType::Player; }
-	inline virtual CollisionHandlerType GetCollisionHandlerType() const override { return CollisionHandlerType::Sphere; }
 
+	virtual void Update(float deltaTime) override;
 private:
 	friend class Client;
+	friend class PacketHandler;
 
 	Ref<Camera> camera;
 	bool handleInput;
@@ -39,4 +40,6 @@ private:
 	int jumpCount;
 
 	std::map<int, ClientMoveState> moveStates;
+
+	bool canMove;
 };

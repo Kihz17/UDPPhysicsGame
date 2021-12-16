@@ -127,7 +127,7 @@ void Client::OnUpdate(float deltaTime)
 	lastInputUpdate = (curr - prev) / double(CLOCKS_PER_SEC);
 	if (playerController)
 	{
-		playerController->OnUpdate(deltaTime);
+		playerController->UpdateController(deltaTime);
 
 		if (lastInputUpdate >= (1.0f / updatesPerSecond))
 		{

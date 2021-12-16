@@ -28,10 +28,16 @@ void PacketHandler::HandlePacket(int packetType, Buffer& buffer, Client* client)
 	else if (packetType == 2)
 	{
 		PacketSpawnGameObject packet(buffer);
-		if (client->ourId != -1 && !client->playerController) // We are spawning ourselves in the world, setup player controller
+		if (client->ourId != -1 && !client->playerController) // We are spawning ourselves in the world for the first time, setup player controller
 		{
 			client->playerController = new PlayerController(client->ourId, client->camera, glm::vec3(packet.x, packet.y, packet.z));
+			client->world->SetPlayerController(client->playerController);
 			Input::SetCursorMode(CursorMode::Locked);
+		}
+		else if (packet.gameObjectId == client->ourId) // Respawning
+		{
+			client->playerController->UpdatePosition(glm::vec3(packet.x, packet.y, packet.z));
+			client->playerController->canMove = true;
 		}
 		else
 		{
@@ -42,7 +48,14 @@ void PacketHandler::HandlePacket(int packetType, Buffer& buffer, Client* client)
 	else if (packetType == 3)
 	{
 		PacketRemoveGameObject packet(buffer);
-		client->world->RemoveGameObject(packet.gameObjectId);
+		if (packet.gameObjectId == client->ourId) // We have died, disable controls and move the camera to overlook the arena
+		{
+			client->playerController->canMove = false;
+		}
+		else // Stop tracking this game object
+		{
+			client->world->RemoveGameObject(packet.gameObjectId);
+		}
 		return;
 	}
 	else if (packetType == 4)
