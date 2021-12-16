@@ -14,4 +14,6 @@ public:
 	inline virtual GameObjectType GetType() const override { return GameObjectType::Player; }
 
 	PlayerNetworkInfo networkInfo;
+
+	time_t lastInputTime = 0;
 };

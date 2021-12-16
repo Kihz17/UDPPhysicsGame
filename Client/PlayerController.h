@@ -27,6 +27,8 @@ public:
 	inline virtual GameObjectType GetType() const override { return GameObjectType::Player; }
 
 	virtual void Update(float deltaTime) override;
+
+	bool canMove;
 private:
 	friend class Client;
 	friend class PacketHandler;
@@ -40,6 +42,4 @@ private:
 	int jumpCount;
 
 	std::map<int, ClientMoveState> moveStates;
-
-	bool canMove;
 };

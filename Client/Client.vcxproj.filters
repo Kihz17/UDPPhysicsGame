@@ -156,9 +156,6 @@
     <ClInclude Include="ClientGameObject.h">
       <Filter>Header Files\Physics\ClientGameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="ClientSphere.h">
-      <Filter>Header Files\Physics\ClientGameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="YAMLOverloads.h">
       <Filter>Header Files\Graphics\Saveable</Filter>
     </ClInclude>

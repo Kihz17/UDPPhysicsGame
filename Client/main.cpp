@@ -132,7 +132,7 @@ int main(int argc, char** argv)
 			world->OnUpdate(deltaTime);
 		}
 
-		if (client.GetPlayerController()) // Update camera with controller
+		if (client.GetPlayerController() && client.GetPlayerController()->canMove) // Update camera with controller
 		{
 			glm::mat4& clientTransform = client.GetPlayerController()->GetTransform();
 			client.GetCamera()->position = glm::vec3(clientTransform[3]) + cameraOffset + (client.GetCamera()->direction * -30.0f);

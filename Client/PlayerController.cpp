@@ -16,8 +16,9 @@ PlayerController::PlayerController(int id, Ref<Camera> camera, const glm::vec3& 
 	jumpCount(0),
 	canMove(true)
 {
-	transform *= glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 2.0f, 2.0f));
 	transform *= glm::translate(glm::mat4(1.0f), position);
+	this->radius = PlayerInfo::PlayerRadius;
+	this->damping = PlayerInfo::PlayerDamping;
 }
 
 void PlayerController::UpdateController(float deltaTime)
@@ -64,7 +65,7 @@ void PlayerController::UpdateController(float deltaTime)
 			if (jumpCount < 2 && Input::IsKeyPressed(Key::Space) && lastSpacePress >= 0.5f)
 			{
 				lastSpacePress = 0.0f;
-				force.y += PlayerInfo::PlayerJumpForce;
+				ApplyConstantForce(glm::vec3(0.0f, PlayerInfo::PlayerJumpForce, 0.0f));
 				jumpCount++;
 			}
 
@@ -118,6 +119,7 @@ void PlayerController::ValidateMoveState(int requestId, const glm::vec3& positio
 	glm::vec3 difference = position - moveState.postion;
 	if (glm::dot(difference, difference) > PlayerInfo::MaximumPositionLeniency) // Server is telling us we are not where we are supposed to be
 	{
+		this->velocity = glm::vec3(0.0f, 0.0f, 0.0f); // Server has corrected us, reset our velocity
 		UpdatePosition(position);
 	}
 
@@ -127,4 +129,5 @@ void PlayerController::ValidateMoveState(int requestId, const glm::vec3& positio
 void PlayerController::Update(float deltaTime)
 {
 	ClientPlayer::Update(deltaTime);
+//	std::cout << "Vel: X: " << GetVelocity().x << " Y: " << GetVelocity().y << " Z: " << GetVelocity().z << std::endl;
 }

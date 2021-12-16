@@ -13,4 +13,6 @@ public:
 	static const float PlayerDefaultBounciness;
 	static const float PlayerColliderRadius;
 	static const float PlayerJumpForce;
+	static const float PlayerDamping;
+	static const float PlayerRadius;
 };

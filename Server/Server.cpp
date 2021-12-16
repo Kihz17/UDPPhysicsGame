@@ -135,8 +135,10 @@ void Server::ReadData()
 		if (it != players.end())
 		{
 			Player* p = it->second;
+			PacketRemoveGameObject packet(p->GetId());
 			players.erase(it);
 			gameObjects.erase(p->GetId());
+			BroadcastPacket(packet);
 			delete p;
 		}
 
@@ -220,7 +222,11 @@ void Server::BroadcastUpdate()
 		std::unordered_map<int, GameObject*>::iterator it = gameObjects.begin();
 		while (it != gameObjects.end())
 		{
-			if (it->second->isDead()) continue; // We don't care about dead objects
+			if (it->second->isDead())
+			{
+				it++;
+				continue; // We don't care about dead objects
+			}
 
 			GameObjectMoveUpdate update;
 			update.gameObjectId = it->second->GetId();
@@ -352,14 +358,16 @@ void Server::UpdateGameState()
 {
 	if (gameOver)
 	{
-		if (readiedPlayers.size() >= players.size()) // All the players a ready
+		if (readiedPlayers.size() >= players.size()) // All the players are ready
 		{
 			// Broadcast spawn packet for all players to each player (this will respawn dead players, and re-enable player controls)
 			std::unordered_map<unsigned short, Player*>::iterator playerIt = players.begin();
 			while (playerIt != players.end())
 			{
 				Player* p = playerIt->second;
+				p->SetDead(false);
 				glm::vec3 spawnPos = GetRandomSpawnPoint();
+				p->UpdatePosition(spawnPos);
 				PacketSpawnGameObject spawnPacket(p->GetId(), p->GetType(), spawnPos.x, spawnPos.y, spawnPos.z);
 				BroadcastPacket(spawnPacket);
 				playerIt++;
@@ -370,33 +378,31 @@ void Server::UpdateGameState()
 		return;
 	}
 
-	if (players.size() >= 2)
+	int deadCount = 0;
+	std::unordered_map<unsigned short, Player*>::iterator playerIt = players.begin();
+	while (playerIt != players.end())
 	{
-		int deadCount = 0;
-		std::unordered_map<unsigned short, Player*>::iterator playerIt = players.begin();
-		while (playerIt != players.end())
+		Player* p = playerIt->second;
+		if (p->isDead()) // We are already dead
 		{
-			Player* p = playerIt->second;
-			if (p->isDead()) // We are already dead
-			{
-				deadCount++;
-				continue;
-			}
-
-			if (p->GetTransform()[3].y <= -20.0f) // We've fallen below the map, kill
-			{
-				p->SetDead(true);
-				PacketRemoveGameObject destroyPacket(p->GetId());
-				BroadcastPacket(destroyPacket);
-			}
-
+			deadCount++;
 			playerIt++;
+			continue;
 		}
 
-		if (deadCount >= players.size() - 1) // All dead, or last man standing
+		if (p->GetTransform()[3].y <= -40.0f) // We've fallen below the map, kill
 		{
-			readiedPlayers.clear();
-			gameOver = true;
+			p->SetDead(true);
+			PacketRemoveGameObject destroyPacket(p->GetId());
+			BroadcastPacket(destroyPacket);
 		}
+
+		playerIt++;
+	}
+
+	if ((players.size() >= 2 && deadCount >= players.size() - 1) || (players.size() == 1 && deadCount == 1)) // All dead, or last man standing
+	{
+		readiedPlayers.clear();
+		gameOver = true;
 	}
 }

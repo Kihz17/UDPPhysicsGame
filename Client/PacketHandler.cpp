@@ -51,6 +51,8 @@ void PacketHandler::HandlePacket(int packetType, Buffer& buffer, Client* client)
 		if (packet.gameObjectId == client->ourId) // We have died, disable controls and move the camera to overlook the arena
 		{
 			client->playerController->canMove = false;
+			client->camera->position = glm::vec3(0.0f, 40.0f, 0.0f);
+			client->camera->direction = glm::vec3(0.1f, -0.99f, 0.0f);
 		}
 		else // Stop tracking this game object
 		{

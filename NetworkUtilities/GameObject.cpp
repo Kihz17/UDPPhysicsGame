@@ -36,6 +36,10 @@ void GameObject::ClearAppliedForces()
 	this->appliedForce.x = 0.0f;
 	this->appliedForce.y = 0.0f;
 	this->appliedForce.z = 0.0f;
+
+	this->constantAppliedForce.x = 0.0f;
+	this->constantAppliedForce.y = 0.0f;
+	this->constantAppliedForce.z = 0.0f;
 }
 
 void GameObject::Update(float deltaTime)
@@ -44,6 +48,8 @@ void GameObject::Update(float deltaTime)
 	{
 		return;
 	}
+
+	velocity += constantAppliedForce;
 
 	this->transform[3].x += this->velocity.x * deltaTime;
 	this->transform[3].y += this->velocity.y * deltaTime;

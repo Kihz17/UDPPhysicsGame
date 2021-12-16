@@ -4,6 +4,8 @@
 
 #include <Packets.h>
 
+#include <ctime>
+
 std::clock_t curr;
 std::clock_t prev;
 
@@ -97,6 +99,12 @@ void Client::OnUpdate(float deltaTime)
 		connected = false;
 	}
 	
+	if (Input::IsKeyPressed(Key::Enter))
+	{
+		printf("Sending ready status...\n");
+		PacketReadyUp packet;
+		Send(packet);
+	}
 	
 	if (!connected)
 	{

@@ -54,6 +54,7 @@ public:
 
 	virtual void ApplyForce(const glm::vec3& force);
 	virtual void ApplyImpulse(const glm::vec3& impulse);
+	inline void ApplyConstantForce(const glm::vec3& force) { constantAppliedForce = force; }
 
 	virtual void ClearAppliedForces();
 
@@ -95,6 +96,7 @@ protected:
 
 	glm::vec3 acceleration;
 	glm::vec3 appliedForce;
+	glm::vec3 constantAppliedForce;
 
 	bool dead;
 };

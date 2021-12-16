@@ -1,6 +1,6 @@
 #include "PacketRemoveGameObject.h"
 
-PacketRemoveGameObject::PacketRemoveGameObject(int gameObjectIdz)
+PacketRemoveGameObject::PacketRemoveGameObject(int gameObjectId)
 	: gameObjectId(gameObjectId)
 {
 

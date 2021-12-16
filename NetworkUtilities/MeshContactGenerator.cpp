@@ -61,6 +61,12 @@ size_t MeshContactGenerator::AddContact(std::vector<GameObject*>& gameObjects, C
 			}
 
 			// We have made contact!
+
+			if (normal.y > 0.0f)
+			{
+				gameObject->ResetJump();
+			}
+			
 			contactInstance->contactNormal = normal;
 			contactInstance->obj1 = gameObject;
 			contactInstance->obj2 = NULL;
