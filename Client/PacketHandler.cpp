@@ -77,7 +77,7 @@ void PacketHandler::HandlePacket(int packetType, Buffer& buffer, Client* client)
 				gameObject->GetVelocity() = update.velocity; // Update velocity with server's state
 				gameObject->lastKnownPosition = update.position;
 				gameObject->ValidateMoveState(update.requestId, update.position); // Make sure this gameobject is in the right position, if not correct it
-				gameObject->timeSinceLastUpdate = 0.00001f; // We jsut received a game state update, update
+				gameObject->timeSinceLastUpdate = 0.000001f; // We jsut received a game state update, update
 			}
 		}
 		return;

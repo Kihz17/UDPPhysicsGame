@@ -16,6 +16,12 @@ public:
 
 	virtual void ValidateMoveState(int requestId, const glm::vec3& position);
 
+	virtual void Update(float deltaTime) override;
+
 	float timeSinceLastUpdate;
 	glm::vec3 lastKnownPosition;
+	bool shouldLerp = false;
+	glm::vec3 lerpTo;
+	float lerpIncrement;
+	float lerpValue;
 };

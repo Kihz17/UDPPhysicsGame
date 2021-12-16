@@ -66,6 +66,7 @@ void PlayerController::UpdateController(float deltaTime)
 			{
 				lastSpacePress = 0.0f;
 				ApplyConstantForce(glm::vec3(0.0f, PlayerInfo::PlayerJumpForce, 0.0f));
+
 				jumpCount++;
 			}
 
@@ -128,6 +129,19 @@ void PlayerController::ValidateMoveState(int requestId, const glm::vec3& positio
 
 void PlayerController::Update(float deltaTime)
 {
-	ClientPlayer::Update(deltaTime);
-//	std::cout << "Vel: X: " << GetVelocity().x << " Y: " << GetVelocity().y << " Z: " << GetVelocity().z << std::endl;
+	if (this->inverseMass == 0.f)
+	{
+		return;
+	}
+
+	velocity += constantAppliedForce;
+
+	this->transform[3].x += this->velocity.x * deltaTime;
+	this->transform[3].y += this->velocity.y * deltaTime;
+	this->transform[3].z += this->velocity.z * deltaTime;
+
+	this->velocity += (this->acceleration + this->appliedForce * this->inverseMass) * deltaTime;
+	this->velocity *= glm::pow(this->damping, deltaTime);
+
+	ClearAppliedForces();
 }
