@@ -13,7 +13,8 @@
 // 3 = PacketDestroyGameObject (Server -> Client)
 // 4 = PacketUpdateGameObjectPositions (Server -> Client)
 // 5 = PacketServerShutdown (Server -> Client)
-// 5 = PacketReadyUp (Client -> Server)
+// 6 = PacketReadyUp (Client -> Server)
+// 7 = PacketGameObjectHit (Client -> Server & Server -> Client)
 void PacketHandler::HandlePacket(int packetType, Buffer& buffer, Server* server, Player* player)
 {
 	if (packetType == 0) // Player moved
@@ -92,6 +93,23 @@ void PacketHandler::HandlePacket(int packetType, Buffer& buffer, Server* server,
 			server->readiedPlayers.insert(player);
 			printf("Player %d has readied.\n", player->GetId());
 		}
+		return;
+	}
+	else if (packetType == 7) // Player got hit
+	{
+		PacketGameObjectHit packet(buffer);
+		int defenderId = packet.gameObjectId;
+		std::unordered_map<int, GameObject*>::iterator it = server->gameObjects.find(defenderId);
+		if (it == server->gameObjects.end()) return; // Defender does not exist
+
+		GameObject* defender = it->second;
+		glm::vec3 hitVelocity = glm::normalize(packet.direction) * PlayerInfo::HitForce;
+		glm::vec3 attackerPos = glm::vec3(player->GetTransform()[3]);
+		glm::vec3 difference = attackerPos - glm::vec3(defender->GetTransform()[3]);
+		if (glm::dot(difference, difference) > PlayerInfo::MaxHitDistance) return; // Too far to hit
+
+		defender->GetVelocity() = hitVelocity;
+		defender->UpdatePosition(glm::vec3(defender->GetTransform()[3]) + hitVelocity);
 		return;
 	}
 

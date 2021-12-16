@@ -7,3 +7,4 @@
 #include "PacketUpdateGameObjectPositions.h"
 #include "PacketServerShutdown.h"
 #include "PacketReadyUp.h"
+#include "PacketGameObjectHit.h"

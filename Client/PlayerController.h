@@ -16,7 +16,7 @@ public:
 
 	void ToggleHandleInput(bool state);
 
-	virtual void ValidateMoveState(int requestId, const glm::vec3& position) override;
+	virtual void ValidateMoveState(int requestId, const glm::vec3& position, bool enableLerp = true) override;
 	virtual void RemoveMoveStateAt(int index);
 	inline virtual void InsertMoveState(int requestId, ClientMoveState moveState) { moveStates.insert({ requestId, moveState }); }
 
@@ -42,4 +42,6 @@ private:
 	int jumpCount;
 
 	std::map<int, ClientMoveState> moveStates;
+
+	bool predictionEnabled;
 };

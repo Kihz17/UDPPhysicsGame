@@ -10,3 +10,5 @@ const float PlayerInfo::PlayerColliderRadius = 2.0f;
 const float PlayerInfo::PlayerJumpForce = 50.0f;
 const float PlayerInfo::PlayerDamping = 0.1f;
 const float PlayerInfo::PlayerRadius = 2.0f;
+const float PlayerInfo::HitForce = 20.0f;
+const float PlayerInfo::MaxHitDistance = 100.0f;

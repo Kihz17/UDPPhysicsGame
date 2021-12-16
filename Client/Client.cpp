@@ -105,6 +105,39 @@ void Client::OnUpdate(float deltaTime)
 		PacketReadyUp packet;
 		Send(packet);
 	}
+
+	if (Input::IsKeyPressed(Key::Equal) && playerController)
+	{
+		printf("Enabling client side prediction\n");
+		playerController->predictionEnabled = true;
+	}
+	else if (Input::IsKeyPressed(Key::Minus) && playerController)
+	{
+		printf("Disabling client side prediction\n");
+		playerController->predictionEnabled = false;
+	}
+
+	if (Input::IsKeyPressed(Key::Zero) && playerController)
+	{
+		printf("Enabling dead reckoning\n");
+		world->enableDeadReckoning = true;
+	}
+	else if (Input::IsKeyPressed(Key::Nine) && playerController)
+	{
+		printf("Disabling dead reckoning\n");
+		world->enableDeadReckoning = false;
+	}
+
+	if (Input::IsKeyPressed(Key::Eight) && playerController)
+	{
+		printf("Enabling lerp\n");
+		world->enablingLerping = true;
+	}
+	else if (Input::IsKeyPressed(Key::Seven) && playerController)
+	{
+		printf("Disabling lerp\n");
+		world->enablingLerping = false;
+	}
 	
 	if (!connected)
 	{

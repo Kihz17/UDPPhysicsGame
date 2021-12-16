@@ -29,6 +29,9 @@ public:
 
 	inline void SetPlayerController(PlayerController* player) { this->player = player; }
 
+	bool enableDeadReckoning;
+	bool enablingLerping;
+
 private:
 	void UpdateGameObjects(float deltaTime);
 	size_t GenerateContacts();

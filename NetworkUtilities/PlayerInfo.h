@@ -15,4 +15,6 @@ public:
 	static const float PlayerJumpForce;
 	static const float PlayerDamping;
 	static const float PlayerRadius;
+	static const float HitForce;
+	static const float MaxHitDistance;
 };

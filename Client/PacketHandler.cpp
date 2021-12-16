@@ -10,6 +10,7 @@
 // 3 = PacketDestroyGameObject (Server -> Client)
 // 4 = PacketUpdateGameObjectPositions (Server -> Client)
 // 5 = PacketServerShutdown (Server -> Client)
+// 7 = PacketGameObjectHit (Client -> Server & Server -> Client)
 void PacketHandler::HandlePacket(int packetType, Buffer& buffer, Client* client)
 {
 	if (packetType == 1)
@@ -74,9 +75,18 @@ void PacketHandler::HandlePacket(int packetType, Buffer& buffer, Client* client)
 			{
 				ClientGameObject* gameObject = client->world->GetGameObject(update.gameObjectId);
 				glm::vec3 oldPosition = glm::vec3(gameObject->GetTransform()[3]);
-				gameObject->GetVelocity() = update.velocity; // Update velocity with server's state
+
+				if (client->world->enableDeadReckoning)
+				{
+					gameObject->GetVelocity() = update.velocity; // Update velocity with server's state
+				}
+				else
+				{
+					gameObject->GetVelocity() = glm::vec3(0.0f, 0.0f, 0.0f);
+				}
+			
 				gameObject->lastKnownPosition = update.position;
-				gameObject->ValidateMoveState(update.requestId, update.position); // Make sure this gameobject is in the right position, if not correct it
+				gameObject->ValidateMoveState(update.requestId, update.position, client->world->enablingLerping); // Make sure this gameobject is in the right position, if not correct it
 				gameObject->timeSinceLastUpdate = 0.000001f; // We jsut received a game state update, update
 			}
 		}
@@ -87,6 +97,10 @@ void PacketHandler::HandlePacket(int packetType, Buffer& buffer, Client* client)
 		client->connected = false;
 		printf("Server has shutdown.\n");
 		return;
+	}
+	else if (packetType == 7) // Player got hit
+	{
+
 	}
 
 	printf("No handler for PacketType %d", packetType);

@@ -5,7 +5,9 @@
 #include <iostream>
 
 World::World(size_t maxContacts, size_t iterations)
-	: player(nullptr), contactResolver(iterations)
+	: player(nullptr), contactResolver(iterations),
+	 enableDeadReckoning(true),
+	enablingLerping(true)
 {
 	this->calculateIterations = (iterations == 0);
 	this->contacts = new ContactInstance[maxContacts];
@@ -94,18 +96,6 @@ void World::UpdateGameObjects(float deltaTime)
 			ClientGameObject* gameObject = it->second;
 			gameObject->ApplyForce(PlayerInfo::Gravity * gameObject->GetMass());
 			gameObject->Update(deltaTime);
-			gameObject->timeSinceLastUpdate += deltaTime;
-
-			//glm::mat4& transform = gameObject->GetTransform();
-
-			//glm::vec3 velocity = gameObject->GetLastVelocity() * (0.25f + gameObject->timeSinceLastUpdate);
-
-			//// Update postion based off of the last move state update
-			//transform[3].x += velocity.x;
-			//transform[3].y += velocity.y;
-			//transform[3].z += velocity.z;
-
-
 			it++;
 		}
 	}
