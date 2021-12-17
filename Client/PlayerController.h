@@ -41,6 +41,8 @@ private:
 	float lastSpacePress;
 	int jumpCount;
 
+	float lastHit;
+
 	std::map<int, ClientMoveState> moveStates;
 
 	bool predictionEnabled;

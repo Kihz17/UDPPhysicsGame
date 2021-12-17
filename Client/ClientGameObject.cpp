@@ -55,10 +55,6 @@ void ClientGameObject::Update(float deltaTime)
 		}
 	}
 
-	/*this->transform[3].x = this->lastKnownPosition.x + this->velocity.x * timeSinceLastUpdate * 8.0f;
-	this->transform[3].y = this->lastKnownPosition.y + this->velocity.y * timeSinceLastUpdate * 8.0f;
-	this->transform[3].z = this->lastKnownPosition.z + this->velocity.z * timeSinceLastUpdate * 8.0f;	*/
-
 	this->transform[3].x = this->lastKnownPosition.x + this->velocity.x * timeSinceLastUpdate * 16.0f;
 	this->transform[3].y = this->lastKnownPosition.y + this->velocity.y * timeSinceLastUpdate * 16.0f;
 	this->transform[3].z = this->lastKnownPosition.z + this->velocity.z * timeSinceLastUpdate * 16.0f;

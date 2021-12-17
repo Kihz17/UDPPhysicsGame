@@ -15,7 +15,8 @@ PlayerController::PlayerController(int id, Ref<Camera> camera, const glm::vec3& 
 	lastSpacePress(10000.0f),
 	jumpCount(0),
 	canMove(true),
-	predictionEnabled(true)
+	predictionEnabled(true),
+	lastHit(1.0f)
 {
 	transform *= glm::translate(glm::mat4(1.0f), position);
 	this->radius = PlayerInfo::PlayerRadius;

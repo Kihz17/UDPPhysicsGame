@@ -150,6 +150,7 @@
     <ClInclude Include="IContactGenerator.h" />
     <ClInclude Include="MeshContactGenerator.h" />
     <ClInclude Include="Packet.h" />
+    <ClInclude Include="PacketGameObjectHit.h" />
     <ClInclude Include="PacketPlayerConnectSuccess.h" />
     <ClInclude Include="PacketPlayerInput.h" />
     <ClInclude Include="PacketReadyUp.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="ContactResolver.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="MeshContactGenerator.cpp" />
+    <ClCompile Include="PacketGameObjectHit.cpp" />
     <ClCompile Include="PacketPlayerConnectSuccess.cpp" />
     <ClCompile Include="PacketPlayerInput.cpp" />
     <ClCompile Include="PacketReadyUp.cpp" />

@@ -90,6 +90,9 @@
     <ClInclude Include="MeshContactGenerator.h">
       <Filter>Header Files\Physics\ContactGenerators</Filter>
     </ClInclude>
+    <ClInclude Include="PacketGameObjectHit.h">
+      <Filter>Header Files\Packets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Buffer.cpp">
@@ -136,6 +139,9 @@
     </ClCompile>
     <ClCompile Include="MeshContactGenerator.cpp">
       <Filter>Source Files\Physics\ContactGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketGameObjectHit.cpp">
+      <Filter>Source Files\Packets</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

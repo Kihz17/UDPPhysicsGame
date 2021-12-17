@@ -2,6 +2,8 @@
 #include "PacketHandler.h"
 #include "Input.h"
 
+#include <PlayerInfo.h>
+
 #include <Packets.h>
 
 #include <ctime>
@@ -105,39 +107,6 @@ void Client::OnUpdate(float deltaTime)
 		PacketReadyUp packet;
 		Send(packet);
 	}
-
-	if (Input::IsKeyPressed(Key::Equal) && playerController)
-	{
-		printf("Enabling client side prediction\n");
-		playerController->predictionEnabled = true;
-	}
-	else if (Input::IsKeyPressed(Key::Minus) && playerController)
-	{
-		printf("Disabling client side prediction\n");
-		playerController->predictionEnabled = false;
-	}
-
-	if (Input::IsKeyPressed(Key::Zero) && playerController)
-	{
-		printf("Enabling dead reckoning\n");
-		world->enableDeadReckoning = true;
-	}
-	else if (Input::IsKeyPressed(Key::Nine) && playerController)
-	{
-		printf("Disabling dead reckoning\n");
-		world->enableDeadReckoning = false;
-	}
-
-	if (Input::IsKeyPressed(Key::Eight) && playerController)
-	{
-		printf("Enabling lerp\n");
-		world->enablingLerping = true;
-	}
-	else if (Input::IsKeyPressed(Key::Seven) && playerController)
-	{
-		printf("Disabling lerp\n");
-		world->enablingLerping = false;
-	}
 	
 	if (!connected)
 	{
@@ -161,6 +130,69 @@ void Client::OnUpdate(float deltaTime)
 		else if (Input::IsKeyPressed(Key::Tab))
 		{
 			playerController->ToggleHandleInput(true);
+		}
+
+		if (Input::IsKeyPressed(Key::Equal))
+		{
+			printf("Enabling client side prediction\n");
+			playerController->predictionEnabled = true;
+		}
+		else if (Input::IsKeyPressed(Key::Minus))
+		{
+			printf("Disabling client side prediction\n");
+			playerController->predictionEnabled = false;
+		}
+
+		if (Input::IsKeyPressed(Key::Zero))
+		{
+			printf("Enabling dead reckoning\n");
+			world->enableDeadReckoning = true;
+		}
+		else if (Input::IsKeyPressed(Key::Nine))
+		{
+			printf("Disabling dead reckoning\n");
+			world->enableDeadReckoning = false;
+		}
+
+		if (Input::IsKeyPressed(Key::Eight))
+		{
+			printf("Enabling lerp\n");
+			world->enablingLerping = true;
+		}
+		else if (Input::IsKeyPressed(Key::Seven))
+		{
+			printf("Disabling lerp\n");
+			world->enablingLerping = false;
+		}
+
+		if (Input::IsMouseButtonPressed(Mouse::ButtonLeft) && playerController->lastHit >= 1.0f) // Try to hit
+		{
+			glm::vec3 rayOrigin = camera->position;
+			glm::vec3 ray = glm::normalize(camera->direction);
+
+			// Check if we are looking at any players
+			for (ClientGameObject* obj : world->GetGameObjects())
+			{
+				if (obj->GetId() == ourId) continue;
+
+				glm::vec3 center = glm::vec3(obj->GetTransform()[3]);
+				glm::vec3 positionDiff = glm::vec3(playerController->GetTransformSafe()[3]) - center;
+				if (glm::dot(positionDiff, positionDiff) > PlayerInfo::MaxHitDistance) continue; // Too far to hit this person
+
+				float radius = obj->radius;
+
+				glm::vec3 difference = rayOrigin - center;
+				float a = glm::dot(ray, ray);
+				float b = 2.0f * glm::dot(difference, ray);
+				float c = glm::dot(difference, difference) - radius * radius;
+				float discriminant = b * b - 4 * a * c;
+				if (discriminant > 0.0f) // We hit something
+				{
+					PacketGameObjectHit packet(obj->GetId(), ray);
+					Send(packet);
+					break;
+				}
+			}
 		}
 	}
 
