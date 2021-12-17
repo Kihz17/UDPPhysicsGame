@@ -103,6 +103,7 @@ void PacketHandler::HandlePacket(int packetType, Buffer& buffer, Server* server,
 		if (it == server->gameObjects.end()) return; // Defender does not exist
 
 		GameObject* defender = it->second;
+		packet.direction.y = 0.0f;
 		glm::vec3 hitVelocity = glm::normalize(packet.direction) * PlayerInfo::HitForce;
 		glm::vec3 attackerPos = glm::vec3(player->GetTransform()[3]);
 		glm::vec3 difference = attackerPos - glm::vec3(defender->GetTransform()[3]);
