@@ -29,6 +29,7 @@ void ClientGameObject::ValidateMoveState(int requestId, const glm::vec3& positio
 	}
 	else
 	{
+		shouldLerp = false;
 		UpdatePosition(position);
 	}
 }
